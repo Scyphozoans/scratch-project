@@ -1,5 +1,4 @@
 import React, { useRef, useState } from 'react';
-import React, { useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styled, { keyframes } from 'styled-components';
 
@@ -84,16 +83,19 @@ const ButtonContainer = styled.div`
   gap: 0.75rem;
 `;
 
-const Login = () => {
+const Login = () => {2
   const [hasError,setHasError] = useState(false)
   const usernameRef = useRef('');
   const passwordRef = useRef('');
   const navigate = useNavigate();
-  const loginUserData = {
-    username: usernameRef.current.value,
-    password: passwordRef.current.value,
-  };
+
   const handleSubmit = async (e) => {
+    const loginUserData = {
+      username: usernameRef.current.value,
+      password: passwordRef.current.value,
+    };
+    console.log(loginUserData)
+    console.log('THIS IS LOGINUSERDATA', loginUserData);
     e.preventDefault();
     try {
       const postURL = '/auth/login';
@@ -106,7 +108,9 @@ const Login = () => {
         body: JSON.stringify(loginUserData),
       });
       const data = await fetchResponse.json();
-      setClientData(data);
+      console.log(data);
+      navigate('/home')
+      // setClientData(data);
       return data;
     } catch (error) {
       setHasError(true)
@@ -121,7 +125,7 @@ const Login = () => {
         <Input
           name="username"
           ref={usernameRef}
-          type="username"
+          type="text"
           placeholder="username"
         ></Input>
         <Input

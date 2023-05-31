@@ -91,14 +91,17 @@ const [hasError,setHasError] = useState(false)
   const passwordRef = useRef('');
   const emailRef = useRef('')
   const navigate = useNavigate();
-  const loginUserData = {
-    username: usernameRef.current.value,
-    password: passwordRef.current.value,
-    email: emailRef.current.value
-  };
+
   const handleSubmit = async (e) => {
+    const loginUserData = {
+      username: usernameRef.current.value,
+      password: passwordRef.current.value,
+      email: emailRef.current.value
+    };
+    console.log(loginUserData);
     e.preventDefault();
     try {
+      
       const postURL = '/auth/signup';
       const fetchResponse = await fetch(postURL, {
         method: 'POST',
@@ -131,7 +134,7 @@ const [hasError,setHasError] = useState(false)
         <Input
           name="password"
           ref={passwordRef}
-          type="password"
+          type="text"
           placeholder="password"
         ></Input>
         <Input
