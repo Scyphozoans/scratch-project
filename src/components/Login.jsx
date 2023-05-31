@@ -1,4 +1,5 @@
 import React, { useRef, useState } from 'react';
+import React, { useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styled, { keyframes } from 'styled-components';
 
@@ -18,6 +19,10 @@ const LoginPage = styled.div`
   animation-timing-function: linear;
   animation-iteration-count: infinite;
 `;
+const Error = styled.p`
+    color: #ff0000a1;
+    place-self: inherit;
+`
 const Error = styled.p`
     color: #ff0000a1;
     place-self: inherit;
@@ -85,6 +90,7 @@ const ButtonContainer = styled.div`
 
 const Login = () => {
   const [hasError,setHasError] = useState(false)
+  const [hasError,setHasError] = useState(false)
   const usernameRef = useRef('');
   const passwordRef = useRef('');
   const navigate = useNavigate();
@@ -105,8 +111,8 @@ const Login = () => {
         body: JSON.stringify(loginUserData),
       });
       const data = await fetchResponse.json();
-      // setClientData(data);
-      navigate('/board')
+      setClientData(data);
+      return data;
     } catch (error) {
       setHasError(true)
       console.log(error);
@@ -121,6 +127,7 @@ const Login = () => {
           name="username"
           ref={usernameRef}
           type="username"
+          type="username"
           placeholder="username"
         ></Input>
         <Input
@@ -130,7 +137,9 @@ const Login = () => {
           placeholder="password"
         ></Input>
         {hasError && <Error> there was an error </Error>}
+        {hasError && <Error> there was an error </Error>}
         <ButtonContainer>
+          <Button value="sign up" style={{backgroundColor: '#fea6f6'}} onClick={() => navigate('/signup')}>
           <Button value="sign up" style={{backgroundColor: '#fea6f6'}} onClick={() => navigate('/signup')}>
             Sign Up
           </Button>
