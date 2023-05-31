@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import styled, { keyframes } from 'styled-components';
-import { Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 /* TODO: need to require correct model/database */
 
 const gridAnimation = keyframes`
@@ -18,7 +18,8 @@ const SelectBoards = styled.div`
   align-items: center;
   flex-direction: column;
   justify-content: center;
-  margin: 150px 0 0 450px; // TODO: Shouldn't hardcode pixels
+  margin: auto;
+  margin-top: 150px; // TODO: Shouldn't hardcode pixels
   padding: 30px 50px 20px 50px;
   border: 2px solid black;
   border-radius: 10px;
@@ -32,6 +33,26 @@ const SelectBoards = styled.div`
   animation-duration: 40s;
   animation-timing-function: linear;
   animation-iteration-count: infinite;
+`;
+
+const Button = styled.button`
+  margin: 20px 0 0 50px; // TODO: Should not hard code pixels;
+  cursor: pointer;
+  background-color: #fea6f6;
+  text-align: center;
+  font-size: 2rem;
+  border-radius: 2rem;
+  border: 1px solid black;
+  box-shadow: 2px 2px black;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 150ms;
+  transform: translate(-2px, -2px);
+  &:hover {
+    transform: translate(0, 0);
+    box-shadow: 0px 0px;
+  }
 `;
 
 const Li = styled.li`
@@ -71,23 +92,30 @@ const Boards = () => {
   // }
   //   fetchBoardNames();
   // }, []);
-  const names = [1, 2, 3];
-  // const handleClick() {
-
-  // }
+  const names = ['Scrummy 1', 'Scrummy 2', 'Scrummy 3'];
+  const navigate = useNavigate();
 
   return (
     <SelectBoards>
       <Header>Scrummies</Header>
       <div>
         {names.map((e, i) => (
-          <Li>
+          <Li index={i}>
             {e}
             <button onClick={() => deleteBoard()}>X</button>
           </Li>
         ))}
-        <button>+</button>
-        <Link to="/board">Create new board</Link>
+        {/* <Link to="/board">Create new board</Link> */}
+        <Button onClick={() => navigate('/board')}>
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            height="48"
+            viewBox="0 -960 960 960"
+            width="48"
+          >
+            <path d="M450-200v-250H200v-60h250v-250h60v250h250v60H510v250h-60Z" />
+          </svg>
+        </Button>
       </div>
     </SelectBoards>
   );
