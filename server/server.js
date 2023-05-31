@@ -5,7 +5,7 @@ const socketIO = require('socket.io');
 const path = require('path');
 
 // import socket io listeners
-const handleSocketIO = require('./socket_io.js');
+const handleSocketIO = require('./socketIO.js');
 
 
 //-----------MONGO DB CONNECTION STRING---------//
@@ -19,6 +19,7 @@ const server = http.Server(app);
 
 // import PORT from .env file
 const PORT = process.env.PORT || 8080; 
+
 
 // Serve static files in the /dist folder
 app.use('/', express.static(path.join(__dirname, '../dist')));
@@ -41,11 +42,11 @@ const io = socketIO(server, {
 const start = async() => {
   try {
     await mongoose.connect(MONGO_URI);
-    console.log('Connected to Database')
+    console.log('Connected to Database');
+    handleSocketIO(io);
     server.listen(PORT, () => {
       console.log('App listening on PORT ' + PORT);
     });
-    handleSocketIO(io);
   } catch(error) {
     console.log(error.message);
   }
