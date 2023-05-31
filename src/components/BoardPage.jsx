@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import { socket } from './socket';
-import OnlineUsers from './components/OnlineUsers';
-import CreateCard from './components/CreateCard';
-import Column from './components/Column';
+import { socket } from '../socket';
+import OnlineUsers from './OnlineUsers';
+import CreateCard from './CreateCard';
+import Column from './Column';
 import styled from 'styled-components';
 
 const Header = styled.div`
@@ -37,7 +37,7 @@ const Board = styled.div`
 
 const HEADERS = ['To Do', 'In Progress', 'Complete', 'Reviewed'];
 
-const App = () => {
+const BoardPage = () => {
   const [tasks, setTasks] = useState([[], [], [], []]);
   const [allUsers, setAllUsers] = useState({});
   const [user, setUser] = useState();
@@ -219,4 +219,4 @@ const App = () => {
   );
 };
 
-export default App;
+export default BoardPage;
