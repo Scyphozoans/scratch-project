@@ -2,16 +2,18 @@ import React, { useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styled, { keyframes } from 'styled-components';
 
+
+
 const gridAnimation = keyframes`
-  0% { background-position:  0%; }
-  100% {background-position: bottom; }
+  0% { background-position:  100%; }
+  100% {background-position: top }
 `;
-const LoginPage = styled.div`
+const SignupPage = styled.div`
   height: 100vh;
   width: 100%;
   display: grid;
-  background-image: linear-gradient(#a6faff 0.1em, transparent 0.1em),
-    linear-gradient(90deg, #a6faff 0.1em, transparent 0.1em);
+  background-image: linear-gradient(#fea6f762 0.1em, transparent 0.1em),
+    linear-gradient(90deg, #fea6f762 0.1em, transparent 0.1em);
   background-size: 0.7em 0.7em;
   animation-name: ${gridAnimation};
   animation-duration: 40s;
@@ -22,7 +24,6 @@ const Error = styled.p`
     color: #ff0000a1;
     place-self: inherit;
 `
-
 const Form = styled.form`
   border: 2px solid black;
   background-color: white;
@@ -51,7 +52,7 @@ const Button = styled.button`
   cursor: pointer;
   border: 1px solid black;
   font-size: 1.25rem;
-  background-color: #a6faff;
+  background-color: #fea6f6;
   box-shadow: 2px 2px black;
   padding: 0.25rem 0.5rem;
   border-radius: 2rem;
@@ -79,23 +80,26 @@ const Input = styled.input`
 `;
 const ButtonContainer = styled.div`
   display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 0.75rem;
+  grid-template-columns: .5fr ;
+ align-items: center;
+ justify-content: center;
 `;
 
-const Login = () => {
-  const [hasError,setHasError] = useState(false)
+const Signup = () => {
+const [hasError,setHasError] = useState(false)
   const usernameRef = useRef('');
   const passwordRef = useRef('');
+  const emailRef = useRef('')
   const navigate = useNavigate();
   const loginUserData = {
     username: usernameRef.current.value,
     password: passwordRef.current.value,
+    email: emailRef.current.value
   };
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const postURL = '/auth/login';
+      const postURL = '/auth/signup';
       const fetchResponse = await fetch(postURL, {
         method: 'POST',
         headers: {
@@ -106,21 +110,22 @@ const Login = () => {
       });
       const data = await fetchResponse.json();
       setClientData(data);
-      navigate('/board')
+      navigate('/home');
     } catch (error) {
-      setHasError(true)
+      // handle error
+    setHasError(true)
       console.log(error);
       return {};
     }
   };
   return (
-    <LoginPage>
+    <SignupPage>
       <Form onSubmit={handleSubmit}>
-        <Title>Scrummy</Title>
+        <Title>Sign Up</Title>
         <Input
           name="username"
           ref={usernameRef}
-          type="username"
+          type="text"
           placeholder="username"
         ></Input>
         <Input
@@ -129,18 +134,21 @@ const Login = () => {
           type="password"
           placeholder="password"
         ></Input>
+        <Input
+          name="email"
+          ref={emailRef}
+          type="password"
+          placeholder="email"
+        ></Input>
         {hasError && <Error> there was an error </Error>}
         <ButtonContainer>
-          <Button value="sign up" style={{backgroundColor: '#fea6f6'}} onClick={() => navigate('/signup')}>
-            Sign Up
-          </Button>
-          <Button type="submit" value="log in">
-            Log In
+          <Button type="submit" value="sign up">
+            Lets Get Scrummin'!
           </Button>
         </ButtonContainer>
       </Form>
-    </LoginPage>
+    </SignupPage>
   );
 };
 
-export default Login;
+export default Signup;
