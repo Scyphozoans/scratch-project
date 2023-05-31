@@ -21,7 +21,7 @@
 ### Backend MVP Goals:
 - [X] refactor server.js into separated concerns
 - [X] connect to a MongoDB database
-- [ ] create a user schema
+- [X] create a user schema
 - [ ] set up auth
 - [ ] set up Oauth
     - [ ] github

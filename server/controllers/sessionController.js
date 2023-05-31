@@ -19,9 +19,10 @@ sessionController.startSession = async (req, res, next) => {
 // end session - find the appropriate session for this request, then delete the session and send the user to the home page
 
 sessionController.endSession = async (req, res, next) => {
-  const { userID } = res.locals;
+  const { ssid } = req.cookie;
+  console.log(ssid);
   try {
-    await Session.findOneAndDelete({ cookieId: userID });
+    await Session.findOneAndDelete({ cookieId: ssid });
     res.clearCookie('ssid');
     return next();
   } catch (error) {

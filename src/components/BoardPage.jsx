@@ -38,11 +38,15 @@ const Board = styled.div`
 const HEADERS = ['To Do', 'In Progress', 'Complete', 'Reviewed'];
 
 const BoardPage = () => {
+  // initial state of board will be result of get request.
   const [tasks, setTasks] = useState([[], [], [], []]);
   const [allUsers, setAllUsers] = useState({});
   const [user, setUser] = useState();
 
   useEffect(() => {
+    // get request the associated board id in the DB
+    // pull the data on the storage property
+    // a patch request is made to associated board to update storage when save board is pressed, or whenever the page is left/refreshed
     function onLoadTasks(tasks) {
       console.log('ON LOAD TASKS');
       console.log(tasks);
