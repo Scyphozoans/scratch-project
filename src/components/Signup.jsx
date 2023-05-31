@@ -98,7 +98,6 @@ const [hasError,setHasError] = useState(false)
       password: passwordRef.current.value,
       email: emailRef.current.value
     };
-    console.log(loginUserData);
     e.preventDefault();
     try {
       
