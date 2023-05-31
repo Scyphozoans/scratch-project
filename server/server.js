@@ -23,7 +23,10 @@ const PORT = process.env.PORT || 8080;
 
 // Serve static files in the /dist folder
 app.use('/', express.static(path.join(__dirname, '../dist')));
-app.get('/', (req, res) => res.sendFile(__dirname, '../dist/index.html'));
+//redirect to enable client-side routing
+app.get('*', (req, res) => {
+  res.sendFile(path.join(__dirname, '../dist', 'index.html'));
+});
 
 // configure sockey.IO server
 const io = socketIO(server, {
