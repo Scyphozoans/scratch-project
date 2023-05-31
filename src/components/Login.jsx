@@ -5,13 +5,12 @@ import styled, { keyframes } from 'styled-components';
 const gridAnimation = keyframes`
   0% { background-position:  0%; }
   100% {background-position: bottom; }
-`
+`;
 const LoginPage = styled.div`
   height: 100vh;
   width: 100%;
   display: grid;
-  background-image: 
-    linear-gradient( #a6faff 0.1em, transparent 0.1em),
+  background-image: linear-gradient(#a6faff 0.1em, transparent 0.1em),
     linear-gradient(90deg, #a6faff 0.1em, transparent 0.1em);
   background-size: 0.7em 0.7em;
   animation-name: ${gridAnimation};
@@ -20,12 +19,8 @@ const LoginPage = styled.div`
   animation-iteration-count: infinite;
 `;
 
-
-
-
-
 const Form = styled.form`
-border: 2px solid black;
+  border: 2px solid black;
   background-color: white;
   box-shadow: 5px 5px black;
   gap: 0.75rem;
@@ -36,21 +31,20 @@ border: 2px solid black;
     linear-gradient(90deg, rgba(0, 0, 0, 0.05) 0.1em, transparent 0.1em);
   background-size: 0.7em 0.7em;
 
-display:grid;
-padding: 2rem;
+  display: grid;
+  padding: 2rem;
 
-place-self: center;
-`
+  place-self: center;
+`;
 const Title = styled.h1`
   text-align: center;
   font-size: 3rem;
   font-family: 'Abril Fatface', cursive;
   margin-bottom: 1rem;
-  
-`
+`;
 const Button = styled.button`
-font-family: 'Abril Fatface', cursive;
-cursor: pointer;
+  font-family: 'Abril Fatface', cursive;
+  cursor: pointer;
   border: 1px solid black;
   font-size: 1.25rem;
   background-color: #a6faff;
@@ -70,29 +64,32 @@ cursor: pointer;
     cursor: not-allowed;
     background-color: #d1d5db;
   }
-`
+`;
 
 const Input = styled.input`
-    border: 1px solid black;
+  border: 1px solid black;
   border-radius: 2rem;
   color: black;
   font-size: 1.5rem;
-  padding: .75rem 3rem .75rem 1.5rem
-`
+  padding: 0.75rem 3rem 0.75rem 1.5rem;
+`;
 const ButtonContainer = styled.div`
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: .75rem;
-`
+  gap: 0.75rem;
+`;
 
 const Login = () => {
-const usernameRef = useRef("")
-const passwordRef = useRef("")
-const navigate = useNavigate()
-const loginUserData = { username: usernameRef.current.value, password: passwordRef.current.value}
-const handleSubmit = async (e) => {
-  e.preventDefault();
-  try {
+  const usernameRef = useRef('');
+  const passwordRef = useRef('');
+  const navigate = useNavigate();
+  const loginUserData = {
+    username: usernameRef.current.value,
+    password: passwordRef.current.value,
+  };
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    try {
       const postURL = '/auth/login';
       const fetchResponse = await fetch(postURL, {
         method: 'POST',
@@ -103,26 +100,37 @@ const handleSubmit = async (e) => {
         body: JSON.stringify(loginUserData),
       });
       const data = await fetchResponse.json();
-      setClientData(data)
+      setClientData(data);
       return data;
     } catch (error) {
       // handle error
       console.log(error);
       return {};
     }
-  
-  
-}
+  };
   return (
     <LoginPage>
-  
       <Form onSubmit={handleSubmit}>
-      <Title>Scrummy</Title>
-        <Input name="username" ref={usernameRef} type="text" placeholder="username"></Input>
-        <Input name="password" ref={passwordRef} type="password" placeholder="password"></Input>
+        <Title>Scrummy</Title>
+        <Input
+          name="username"
+          ref={usernameRef}
+          type="text"
+          placeholder="username"
+        ></Input>
+        <Input
+          name="password"
+          ref={passwordRef}
+          type="password"
+          placeholder="password"
+        ></Input>
         <ButtonContainer>
-        <Button value="sign up" onClick={() => navigate('/signup')} >Sign Up</Button>
-        <Button type="submit" value="log in">Log In</Button>
+          <Button value="sign up" onClick={() => navigate('/signup')}>
+            Sign Up
+          </Button>
+          <Button type="submit" value="log in">
+            Log In
+          </Button>
         </ButtonContainer>
       </Form>
     </LoginPage>

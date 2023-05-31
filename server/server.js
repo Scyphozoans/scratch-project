@@ -14,22 +14,18 @@ const sessionController = require('./controllers/sessionController.js');
 // import socket io listeners
 const handleSocketIO = require('./socketIO.js');
 
-
-
 //-----------MONGO DB CONNECTION STRING---------//
 // mongo uri stored in .env file, must configure to string
 require('dotenv').config();
 const MONGO_URI = process.env.MONGO_URI;
 mongoose.set('strictQuery', false);
 
-
 const app = express();
 const server = http.Server(app);
 app.use(cookieParser());
 
 // import PORT from .env file
-const PORT = process.env.PORT || 8080; 
-
+const PORT = process.env.PORT || 8080;
 
 // Serve static files in the /dist folder
 app.use('/', express.static(path.join(__dirname, '../dist')));
@@ -45,37 +41,37 @@ const io = socketIO(server, {
   pingInterval: 3000, // how many ms before sending a new ping packet
 });
 
-
 // SET UP ROUTES FOR LOGIN AND SIGNUP
-app.post('/signup', 
+app.post(
+  '/signup',
   userController.createUser,
   cookieController.setSSIDCookie,
   sessionController.startSession,
   (req, res) => {
-  return res.status(200).redirect('/'); // home page or profile page? 
-  // possibly route through frontend so just send status and user info
-});
+    return res.status(200).redirect('/'); // home page or profile page?
+    // possibly route through frontend so just send status and user info
+  }
+);
 
-app.post('/login', 
+app.post(
+  '/login',
   userController.verifyUser,
   cookieController.setSSIDCookie,
   (req, res) => {
-  return res.status(200).redirect('/'); // maybe redirect to user profile page
-  // send user associated data from DB
-});
+    return res.status(200).redirect('/'); // maybe redirect to user profile page
+    // send user associated data from DB
+  }
+);
 
 //SET UP ROUTE FOR LOGOUT
-// Need to check if this idea works 
-app.delete('/logout',
-  sessionController.endSession,
-  (req, res) => {
-    res.status(200).send('Successful logout.');
-  });
-
+// Need to check if this idea works
+app.delete('/logout', sessionController.endSession, (req, res) => {
+  res.status(200).send('Successful logout.');
+});
 
 // SET UP UNKNOWN ROUTES
 
-app.use('*', (_req, res)=> {
+app.use('*', (_req, res) => {
   res.status(404).send('Not Found');
 });
 
@@ -86,7 +82,7 @@ app.use((err, _req, res, _next) => {
 });
 
 // start app with mongoose connection, server, and socket listeners
-const start = async() => {
+const start = async () => {
   try {
     await mongoose.connect(MONGO_URI);
     console.log('Connected to Database');
@@ -94,7 +90,7 @@ const start = async() => {
     server.listen(PORT, () => {
       console.log('App listening on PORT ' + PORT);
     });
-  } catch(error) {
+  } catch (error) {
     console.log(error.message);
   }
 };

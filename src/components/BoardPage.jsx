@@ -3,7 +3,7 @@ import { socket } from '../socket';
 import OnlineUsers from './OnlineUsers';
 import CreateCard from './CreateCard';
 import Column from './Column';
-import styled from 'styled-components';
+import styled, { keyframes } from 'styled-components';
 
 const Header = styled.div`
   display: flex;
