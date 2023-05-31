@@ -1,5 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import UserBoards from './UserBoards';
 import styled from 'styled-components';
 
@@ -10,9 +11,24 @@ const Page = styled.div`
   justify-content: center;
 `;
 
+// const UserBoardss = styled.UserBoards`
+//   display: flex;
+//   justify-content: center;
+// `;
+
+const Nav = styled.nav`
+  display: flex;
+  justify-content: space-between;
+`;
+
+const Li = styled.li`
+  list-style-type: none;
+`;
+
 const Header = styled.header`
   display: flex;
   justify-content: space-between;
+  flex-direction: row;
   align-items: center;
   padding: 10px 10px;
   background-color: #ffffff;
@@ -25,23 +41,54 @@ const Header = styled.header`
   border-bottom: 2px solid black;
 `;
 
-const Li = styled.li`
-  list-style-type: none;
-  display: inline;
-  font-size: 2rem;
+const Button = styled.button`
+font-family: 'Abril Fatface', cursive;
+  cursor: pointer;
+  border: 1px solid black;
+  font-size: 1.25rem;
+  background-color: #a6faff;
+  box-shadow: 2px 2px black;
+  padding: 0.25rem 0.5rem;
+  border-radius: 2rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 150ms;
+  transform: translate(-2px, -2px);
+  &:hover:not([disabled]) {
+    transform: translate(0px, 0px);
+    box-shadow: 0px 0px;
+  }
+  &:disabled {
+    cursor: not-allowed;
+    background-color: #d1d5db;
+  }
 `;
 
-const LogOut = styled(Link)`
-  font-size: 2rem;
-`;
-
-/********************************* Component **************************************/
 const HomePage = () => {
+  const navigate = useNavigate();
+  const handleLogout = async () => {
+    console.log('Logout Clicked!');
+    try {
+      const logout = await fetch('/auth/logout', {
+        method: 'DELETE',
+        credentials: 'include',
+      });
+      navigate('/');
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
   return (
     <Page>
       <Header>
-        <Li>User</Li>
-        <LogOut to="/">Log out</LogOut>
+        <nav>
+          <Li>User</Li>
+          <Button 
+            onClick={handleLogout}
+          >Log out</Button>
+        </nav>
       </Header>
       <UserBoards></UserBoards>
     </Page>
