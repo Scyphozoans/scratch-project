@@ -92,8 +92,25 @@ const Boards = () => {
   // }
   //   fetchBoardNames();
   // }, []);
+  const [boardName, setBoardName] = useState('');
   const names = ['Scrummy 1', 'Scrummy 2', 'Scrummy 3'];
   const navigate = useNavigate();
+  const handleClickDeleteBoard = (e) => {
+    setBoardName(e.target.value);
+    async function deleteBoard() {
+      try {
+        const reponse = await fetch(`/board/${boardName}`, {
+          method: 'DELETE',
+          headers: {
+            'Content-type': 'application/json; charset=UTF-8',
+          },
+        });
+      } catch (err) {
+        console.log(err);
+      }
+    }
+    handleClickDeleteBoard();
+  };
 
   return (
     <SelectBoards>
@@ -102,7 +119,7 @@ const Boards = () => {
         {names.map((e, i) => (
           <Li index={i}>
             {e}
-            <button onClick={() => deleteBoard()}>X</button>
+            <button onClick={() => handleClickDeleteBoard()}>X</button>
           </Li>
         ))}
         {/* <Link to="/board">Create new board</Link> */}
