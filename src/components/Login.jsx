@@ -1,4 +1,5 @@
 import React, { useRef } from 'react';
+import { useNavigate } from 'react-router-dom';
 import styled, { keyframes } from 'styled-components';
 
 const gridAnimation = keyframes`
@@ -27,7 +28,7 @@ const Form = styled.form`
 border: 2px solid black;
   background-color: white;
   box-shadow: 5px 5px black;
-  gap: 0.5rem;
+  gap: 0.75rem;
   background-image: linear-gradient(
       rgba(0, 0, 0, 0.05) 0.1em,
       transparent 0.1em
@@ -36,12 +37,19 @@ border: 2px solid black;
   background-size: 0.7em 0.7em;
 
 display:grid;
-padding: 1rem;
-border-radius: 2rem;
+padding: 2rem;
+
 place-self: center;
 `
-
+const Title = styled.h1`
+  text-align: center;
+  font-size: 3rem;
+  font-family: 'Abril Fatface', cursive;
+  margin-bottom: 1rem;
+  
+`
 const Button = styled.button`
+font-family: 'Abril Fatface', cursive;
 cursor: pointer;
   border: 1px solid black;
   font-size: 1.25rem;
@@ -71,23 +79,51 @@ const Input = styled.input`
   font-size: 1.5rem;
   padding: .75rem 3rem .75rem 1.5rem
 `
-
+const ButtonContainer = styled.div`
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: .75rem;
+`
 
 const Login = () => {
 const usernameRef = useRef("")
 const passwordRef = useRef("")
+const navigate = useNavigate()
+const loginUserData = { username: usernameRef.current.value, password: passwordRef.current.value}
 const handleSubmit = async (e) => {
   e.preventDefault();
-  console.log(usernameRef.current.value)
-  console.log(passwordRef.current.value)
+  try {
+      const postURL = '/auth/login';
+      const fetchResponse = await fetch(postURL, {
+        method: 'POST',
+        headers: {
+          Accept: 'application/json',
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(loginUserData),
+      });
+      const data = await fetchResponse.json();
+      setClientData(data)
+      return data;
+    } catch (error) {
+      // handle error
+      console.log(error);
+      return {};
+    }
+  
+  
 }
   return (
     <LoginPage>
-      <Form method="post" onSubmit={handleSubmit}>
+  
+      <Form onSubmit={handleSubmit}>
+      <Title>Scrummy</Title>
         <Input name="username" ref={usernameRef} type="text" placeholder="username"></Input>
         <Input name="password" ref={passwordRef} type="password" placeholder="password"></Input>
+        <ButtonContainer>
+        <Button value="sign up" onClick={() => navigate('/signup')} >Sign Up</Button>
         <Button type="submit" value="log in">Log In</Button>
-        <Button value="sign up">Sign Up</Button>
+        </ButtonContainer>
       </Form>
     </LoginPage>
   );
