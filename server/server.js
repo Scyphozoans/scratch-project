@@ -138,6 +138,7 @@ app.use('/', express.static(path.join(__dirname, '../dist')));
 app.get('*', (req, res) => {
   res.sendFile(path.join(__dirname, '../dist', 'index.html'));
 });
+
 // SocketIO listeners
 // socket refers to the client
 // io refers this server
