@@ -15,11 +15,13 @@ const sessionController = require('./controllers/sessionController.js');
 const handleSocketIO = require('./socketIO.js');
 
 
+
 //-----------MONGO DB CONNECTION STRING---------//
 // mongo uri stored in .env file, must configure to string
 require('dotenv').config();
 const MONGO_URI = process.env.MONGO_URI;
 mongoose.set('strictQuery', false);
+
 
 const app = express();
 const server = http.Server(app);
@@ -31,13 +33,18 @@ const PORT = process.env.PORT || 8080;
 
 // Serve static files in the /dist folder
 app.use('/', express.static(path.join(__dirname, '../dist')));
-app.get('/', (req, res) => res.sendFile(__dirname, '../dist/index.html'));
+
+//redirect to enable client-side routing
+app.get('*', (req, res) => {
+  res.sendFile(path.join(__dirname, '../dist', 'index.html'));
+});
 
 // configure sockey.IO server
 const io = socketIO(server, {
   pingTimeout: 1000, // how many ms without a ping packet to consider the connection closed
   pingInterval: 3000, // how many ms before sending a new ping packet
 });
+
 
 // SET UP ROUTES FOR LOGIN AND SIGNUP
 app.post('/signup', 
