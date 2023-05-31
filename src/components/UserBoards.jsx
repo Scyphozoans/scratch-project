@@ -1,6 +1,7 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import styled, { keyframes } from 'styled-components';
 import { Link } from 'react-router-dom';
+/* TODO: need to require correct model/database */
 
 const gridAnimation = keyframes`
   0% { background-position:  0%; }
@@ -8,7 +9,8 @@ const gridAnimation = keyframes`
 `;
 
 const Header = styled.header`
-  font-size: 2rem;
+  font-size: 3rem;
+  margin: 0 0 20px 0;
 `;
 
 const SelectBoards = styled.div`
@@ -16,7 +18,8 @@ const SelectBoards = styled.div`
   align-items: center;
   flex-direction: column;
   justify-content: center;
-  margin-top: 200px; // TODO: Shouldn't hardcode pixels
+  margin: 150px 0 0 450px; // TODO: Shouldn't hardcode pixels
+  padding: 30px 50px 20px 50px;
   border: 2px solid black;
   border-radius: 10px;
   background-color: white;
@@ -39,7 +42,7 @@ const Li = styled.li`
   margin: 10px;
   padding: 0.5rem;
   display: flex;
-  flex-direction: column;
+  justify-content: space-between;
   gap: 0.5rem;
   background-image: linear-gradient(
       rgba(0, 0, 0, 0.05) 0.1em,
@@ -49,14 +52,41 @@ const Li = styled.li`
   background-size: 0.7em 0.7em;
 `;
 
+/********************************* Component **************************************/
+
 const Boards = () => {
+  // const [names, setNames] = useState([]);
+
+  // useEffect(() => {
+  //   async function fetchBoardNames() {
+  //     try {
+  //       const names = await Model.find({
+  //         name: name;
+  //       })
+  //     } catch (err) {
+  //       console.log(err);
+  //     }
+  //   }
+
+  // }
+  //   fetchBoardNames();
+  // }, []);
+  const names = [1, 2, 3];
+  // const handleClick() {
+
+  // }
+
   return (
     <SelectBoards>
       <Header>Scrummies</Header>
       <div>
-        <Li>Scrummie 1</Li>
-        <Li>Scrummie 2</Li>
-        <Li>Scrummie 3</Li>
+        {names.map((e, i) => (
+          <Li>
+            {e}
+            <button onClick={() => deleteBoard()}>X</button>
+          </Li>
+        ))}
+        <button>+</button>
         <Link to="/board">Create new board</Link>
       </div>
     </SelectBoards>
