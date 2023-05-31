@@ -22,11 +22,7 @@ const LoginPage = styled.div`
 const Error = styled.p`
     color: #ff0000a1;
     place-self: inherit;
-`
-const Error = styled.p`
-    color: #ff0000a1;
-    place-self: inherit;
-`
+    `
 
 const Form = styled.form`
   border: 2px solid black;
@@ -90,7 +86,6 @@ const ButtonContainer = styled.div`
 
 const Login = () => {
   const [hasError,setHasError] = useState(false)
-  const [hasError,setHasError] = useState(false)
   const usernameRef = useRef('');
   const passwordRef = useRef('');
   const navigate = useNavigate();
@@ -127,7 +122,6 @@ const Login = () => {
           name="username"
           ref={usernameRef}
           type="username"
-          type="username"
           placeholder="username"
         ></Input>
         <Input
@@ -139,7 +133,7 @@ const Login = () => {
         {hasError && <Error> there was an error </Error>}
         {hasError && <Error> there was an error </Error>}
         <ButtonContainer>
-          <Button value="sign up" style={{backgroundColor: '#fea6f6'}} onClick={() => navigate('/signup')}>
+
           <Button value="sign up" style={{backgroundColor: '#fea6f6'}} onClick={() => navigate('/signup')}>
             Sign Up
           </Button>
