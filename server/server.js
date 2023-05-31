@@ -41,7 +41,7 @@ const io = socketIO(server, {
 
 // SET UP ROUTES FOR LOGIN AND SIGNUP
 app.post('/signup', 
-  userController.createNewUser,
+  userController.createUser,
   cookieController.setSSIDCookie,
   sessionController.startSession,
   (req, res) => {

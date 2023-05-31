@@ -33,7 +33,7 @@ userController.createUser = async (req, res, next) => {
 
 // VERIFY-USER: Obtain username and password from the request body, locate the appropriate user in the database, authenticate the submitted password against the password stored in the database.
 
-useController.verifyUser = async (req, res, next) => {
+userController.verifyUser = async (req, res, next) => {
     const { username, password } = req.body;
     if ( !username || !password ) {
       return next('Username and password are required.');
