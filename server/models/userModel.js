@@ -6,18 +6,21 @@ const bcrypt = require('bcryptjs');
 
 // define user schema
 const userSchema = new Schema({
-  username: {type: String, required: true, unique: true},
-  password: {type: String, required: true}
+  username: { type: String, required: true, unique: true },
+  password: { type: String, required: true },
+  boards: { type: Array, default: [] }
 });
 
 userSchema.pre('save', async function (next) {
   if (!this.isModified('password')) {
     return next();
   }
-
-  bcrypt.hash(this.password, SALT_WORK, function(err, hash) {
-    this.password = hash;
-  });
+  try {
+    this.password = await bcrypt.hash(this.password, SALT_WORK);
+    return next();
+  } catch (err) {
+    return next(err);
+  }
 })
 
 userSchema.methods.matchPassword = async function (enteredPassword) {
@@ -25,3 +28,4 @@ userSchema.methods.matchPassword = async function (enteredPassword) {
 }
 
 module.exports = mongoose.model('User', userSchema);
+
