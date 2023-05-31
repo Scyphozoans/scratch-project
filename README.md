@@ -19,8 +19,8 @@
 - [ ] Drag and drop components
 
 ### Backend MVP Goals:
-- [ ] refactor server.js into separated concerns
-- [ ] connect to a MongoDB database
+- [X] refactor server.js into separated concerns
+- [X] connect to a MongoDB database
 - [ ] create a user schema
 - [ ] set up auth
 - [ ] set up Oauth
