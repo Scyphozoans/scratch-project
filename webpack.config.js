@@ -54,6 +54,11 @@ module.exports = {
       secure: true,
       changeOrigin: true,
     },
+    '/auth': {
+      target: 'http://localhost:8080/',
+      router: () => 'http://localhost:3000',
+      logLevel: 'debug',
+    },
   },
 
   performance: {
