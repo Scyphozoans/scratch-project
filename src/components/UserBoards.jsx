@@ -1,6 +1,7 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import styled, { keyframes } from 'styled-components';
-import { Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
+/* TODO: need to require correct model/database */
 
 const gridAnimation = keyframes`
   0% { background-position:  0%; }
@@ -8,7 +9,8 @@ const gridAnimation = keyframes`
 `;
 
 const Header = styled.header`
-  font-size: 2rem;
+  font-size: 3rem;
+  margin: 0 0 20px 0;
 `;
 
 const SelectBoards = styled.div`
@@ -16,7 +18,9 @@ const SelectBoards = styled.div`
   align-items: center;
   flex-direction: column;
   justify-content: center;
-  margin-top: 200px; // TODO: Shouldn't hardcode pixels
+  margin: auto;
+  margin-top: 150px; // TODO: Shouldn't hardcode pixels
+  padding: 30px 50px 20px 50px;
   border: 2px solid black;
   border-radius: 10px;
   background-color: white;
@@ -31,6 +35,26 @@ const SelectBoards = styled.div`
   animation-iteration-count: infinite;
 `;
 
+const Button = styled.button`
+  margin: 20px 0 0 50px; // TODO: Should not hard code pixels;
+  cursor: pointer;
+  background-color: #fea6f6;
+  text-align: center;
+  font-size: 2rem;
+  border-radius: 2rem;
+  border: 1px solid black;
+  box-shadow: 2px 2px black;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 150ms;
+  transform: translate(-2px, -2px);
+  &:hover {
+    transform: translate(0, 0);
+    box-shadow: 0px 0px;
+  }
+`;
+
 const Li = styled.li`
   list-style-type: none;
   border: 2px solid black;
@@ -39,7 +63,7 @@ const Li = styled.li`
   margin: 10px;
   padding: 0.5rem;
   display: flex;
-  flex-direction: column;
+  justify-content: space-between;
   gap: 0.5rem;
   background-image: linear-gradient(
       rgba(0, 0, 0, 0.05) 0.1em,
@@ -49,15 +73,49 @@ const Li = styled.li`
   background-size: 0.7em 0.7em;
 `;
 
+/********************************* Component **************************************/
+
 const Boards = () => {
+  // const [names, setNames] = useState([]);
+
+  // useEffect(() => {
+  //   async function fetchBoardNames() {
+  //     try {
+  //       const names = await Model.find({
+  //         name: name;
+  //       })
+  //     } catch (err) {
+  //       console.log(err);
+  //     }
+  //   }
+
+  // }
+  //   fetchBoardNames();
+  // }, []);
+  const names = ['Scrummy 1', 'Scrummy 2', 'Scrummy 3'];
+  const navigate = useNavigate();
+
   return (
     <SelectBoards>
       <Header>Scrummies</Header>
       <div>
-        <Li>Scrummie 1</Li>
-        <Li>Scrummie 2</Li>
-        <Li>Scrummie 3</Li>
-        <Link to="/board">Create new board</Link>
+        {names.map((e, i) => (
+          <Li index={i}>
+            {e}
+            <button onClick={() => deleteBoard()}>X</button>
+          </Li>
+        ))}
+        {/* <Link to="/board">Create new board</Link> */}
+        <Button onClick={() => navigate('/board')}>
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            height="48"
+            viewBox="0 -960 960 960"
+            width="48"
+          >
+            <path d="M450-200v-250H200v-60h250v-250h60v250h250v60H510v250h-60Z" />
+          </svg>
+        </Button>
       </div>
     </SelectBoards>
   );

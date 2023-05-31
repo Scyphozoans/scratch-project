@@ -10,24 +10,9 @@ const Page = styled.div`
   justify-content: center;
 `;
 
-// const UserBoardss = styled.UserBoards`
-//   display: flex;
-//   justify-content: center;
-// `;
-
-const Nav = styled.nav`
-  display: flex;
-  justify-content: space-between;
-`;
-
-const Li = styled.li`
-  list-style-type: none;
-`;
-
 const Header = styled.header`
   display: flex;
   justify-content: space-between;
-  flex-direction: row;
   align-items: center;
   padding: 10px 10px;
   background-color: #ffffff;
@@ -40,14 +25,23 @@ const Header = styled.header`
   border-bottom: 2px solid black;
 `;
 
+const Li = styled.li`
+  list-style-type: none;
+  display: inline;
+  font-size: 2rem;
+`;
+
+const LogOut = styled(Link)`
+  font-size: 2rem;
+`;
+
+/********************************* Component **************************************/
 const HomePage = () => {
   return (
     <Page>
       <Header>
-        <nav>
-          <Li>User</Li>
-          <Link to="/">Log out</Link>
-        </nav>
+        <Li>User</Li>
+        <LogOut to="/">Log out</LogOut>
       </Header>
       <UserBoards></UserBoards>
     </Page>
