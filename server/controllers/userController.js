@@ -40,17 +40,17 @@ userController.verifyUser = async (req, res, next) => {
     if ( !username || !password ) {
       return next('Username and password are required.');
     }
-    console.log(username, password);
+
     try {
       const user = await User.findOne({ username });
-      console.log(user);
+
       const pwMatch = await bcrypt.compare(password, user.password);
-      console.log(pwMatch);
+
       if (user && pwMatch) {
         res.locals.userID = user._id.toString();
         res.locals.user = user;
         return next();
-      }
+      } else return next({ err: 'Invalid credentials.' });
     } catch (error) {
       console.log(error);
       return next({ err: 'Could not find user' })
