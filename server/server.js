@@ -102,7 +102,9 @@ app.get('/board/:boardID',
   }
 );
 // DELETE BOARD
-app.delete('/board/:boardID', boardController.deleteBoard, (req, res) => {
+app.delete('/board/:boardID', 
+boardController.deleteBoard, 
+(req, res) => {
   res.sendStatus(200);
 });
 
