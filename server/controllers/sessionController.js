@@ -7,7 +7,7 @@ const sessionController = {};
 sessionController.startSession = async (req, res, next) => {
   const { userID } = res.locals;
   try {
-    const session = await Session.create({ cookieId: userID });
+    const session = await Session.create({ cookieID: userID });
     res.locals.session = session;
     return next();
   } catch (error) {
@@ -24,7 +24,7 @@ sessionController.endSession = async (req, res, next) => {
   const { ssid } = req.cookies;
   console.log(ssid);
   try {
-    await Session.findOneAndDelete({ cookieId: ssid });
+    await Session.findOneAndDelete({ cookieID: ssid });
     res.clearCookie('ssid');
     return next();
   } catch (error) {
@@ -41,7 +41,7 @@ sessionController.verifySession = async (req, res, next) => {
     res.status(200).redirect('/signup');
   }
 
-  Session.findOne({cookieId: req.cookies.ssid}, (err) => {
+  Session.findOne({cookieID: req.cookies.ssid}, (err) => {
     if (err) return res.redirect('/signup');
   })
   return next();

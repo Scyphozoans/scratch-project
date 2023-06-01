@@ -5,6 +5,7 @@ const socketIO = require('socket.io');
 const path = require('path');
 const cookieParser = require('cookie-parser');
 const session = require('express-session');
+const bodyParser = require('body-parser')
 
 //---------IMPORT CONTROLLERS--------//
 const userController = require('./controllers/userController.js');
@@ -25,6 +26,7 @@ const app = express();
 const server = http.Server(app);
 app.use(cookieParser());
 app.use(express.json());
+app.use(bodyParser());
 
 // import PORT from .env file
 const PORT = process.env.PORT || 8080;
@@ -55,28 +57,6 @@ app.post(
   }
 );
 
-// FRONT END REQUEST:
-
-// const loginUserData = {
-//   username: usernameRef.current.value,
-//   password: passwordRef.current.value,
-// };
-
-// const handleSubmit = async (e) => {
-//   e.preventDefault();
-//   try {
-//     const postURL = '/auth/login';
-//     const fetchResponse = await fetch(postURL, {
-//       method: 'POST',
-//       headers: {
-//         Accept: 'application/json',
-//         'Content-Type': 'application/json',
-//       },
-//       body: JSON.stringify(loginUserData),
-//     });
-//     const data = await fetchResponse.json();
-//     setClientData(data);
-
 app.post(
   '/auth/login',
   userController.verifyUser,
@@ -92,12 +72,19 @@ app.post(
 );
 
 //SET UP ROUTE FOR LOGOUT
-// Need to check if this idea works
 app.delete('/auth/logout', sessionController.endSession, (req, res) => {
   res.status(200).send('Successful logout.');
 });
 
 //*****************BOARD ROUTES*****************/ 
+
+// CREATE BOARD
+app.post('/board/create',
+  boardController.createBoard,
+  (req, res) => {
+    res.status(200).json(res.locals.board);
+  }
+);
 
 // GET BOARD NAMES
 app.get('/board/:userID',
@@ -125,14 +112,6 @@ app.delete('/board/:boardID',
 // UPDATE BOARD
 app.put('/board/:boardID',
   boardController.updateBoard,
-  (req, res) => {
-    res.status(200).json(res.locals.board);
-  }
-);
-
-// CREATE BOARD
-app.post('/board/create',
-  boardController.createBoard,
   (req, res) => {
     res.status(200).json(res.locals.board);
   }

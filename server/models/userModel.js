@@ -8,8 +8,9 @@ const bcrypt = require('bcryptjs');
 const userSchema = new Schema({
   username: { type: String, required: true, unique: true },
   password: { type: String, required: true },
-  boards: { type: Array, default: [] }
-});
+  email: { type: String, required: false },
+  boards: { type: Object, required: true, default: {} }
+}, { minimize: false });
 
 userSchema.pre('save', async function (next) {
   if (!this.isModified('password')) {
