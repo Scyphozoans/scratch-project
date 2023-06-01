@@ -1,8 +1,9 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { Link } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
 import UserBoards from './UserBoards';
 import styled from 'styled-components';
+import { UserContext } from '../userContext';
 
 const Page = styled.div`
   font-family: 'Abril Fatface', cursive;
@@ -66,6 +67,7 @@ const Button = styled.button`
 `;
 
 const HomePage = () => {
+  const { username } = useContext(UserContext);
   const navigate = useNavigate();
   const handleLogout = async () => {
     console.log('Logout Clicked!');
@@ -83,8 +85,10 @@ const HomePage = () => {
   return (
     <Page>
       <Header>
-        <Li>User</Li>
-        <Button onClick={handleLogout}>Log out</Button>
+        <nav>
+          <Li>{username}</Li>
+          <Button onClick={handleLogout}>Log out</Button>
+        </nav>
       </Header>
       <UserBoards></UserBoards>
     </Page>

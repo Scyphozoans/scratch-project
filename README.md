@@ -22,15 +22,16 @@
 - [X] refactor server.js into separated concerns
 - [X] connect to a MongoDB database
 - [X] create a user schema
-- [ ] set up auth
-- [ ] set up Oauth
-    - [ ] github
-    - [ ] google
+- [X] set up auth
+
     
 ### Backend Stretch Goals:
 - [ ] Saving scrum board to user
     - [ ] Private boards
     - [ ] Save animal to user
+- [ ] set up Oauth
+    - [ ] github
+    - [ ] google
   
 ### Stretch Testing Goals:
 - [ ] test frontend components 
