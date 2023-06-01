@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
 import UserBoards from './UserBoards';
 import styled from 'styled-components';
+import { UserContext } from '../userContext';
 
 
 const Page = styled.div`
