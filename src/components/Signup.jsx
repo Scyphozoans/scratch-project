@@ -1,7 +1,7 @@
-import React, { useRef, useState } from 'react';
+import React, { useContext, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styled, { keyframes } from 'styled-components';
-
+import UserContext from '../userContext';
 
 
 const gridAnimation = keyframes`
@@ -86,6 +86,7 @@ const ButtonContainer = styled.div`
 `;
 
 const Signup = () => {
+// const {username, setUsername} = useContext(UserContext)
 const [hasError,setHasError] = useState(false)
   const usernameRef = useRef('');
   const passwordRef = useRef('');
@@ -98,6 +99,7 @@ const [hasError,setHasError] = useState(false)
       password: passwordRef.current.value,
       email: emailRef.current.value
     };
+    console.log(loginUserData);
     e.preventDefault();
     try {
       
@@ -111,8 +113,11 @@ const [hasError,setHasError] = useState(false)
         body: JSON.stringify(loginUserData),
       });
       const data = await fetchResponse.json();
+      set
+      console.log(data)
     //   setClientData(data);
-      navigate('/home');
+    if(fetchResponse.ok) navigate('/home');
+  
     } catch (error) {
       // handle error
     setHasError(true)
@@ -133,7 +138,7 @@ const [hasError,setHasError] = useState(false)
         <Input
           name="password"
           ref={passwordRef}
-          type="text"
+          type="password"
           placeholder="password"
         ></Input>
         <Input
