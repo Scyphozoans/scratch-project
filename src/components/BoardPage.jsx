@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useContext } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { socket } from '../socket';
 import OnlineUsers from './OnlineUsers';
 import CreateCard from './CreateCard';
@@ -10,7 +11,8 @@ import { useNavigate } from 'react-router-dom';
 const Header = styled.div`
   display: flex;
   justify-content: space-between;
-  align-items: center;
+  align-items: flex-start;
+  align-self: flex-start;
   padding: 10px 10px;
   background-color: #ffffff;
   background-image: linear-gradient(
@@ -32,12 +34,8 @@ const Title = styled.h1`
   font-size: 2.2rem;
 `;
 
-const Board = styled.div`
-  display: grid;
-  grid-template-columns: 1fr 1fr 1fr 1fr;
-`;
 const SaveButton = styled.button`
-    font-family: 'Abril Fatface', cursive;
+  font-family: 'Abril Fatface', cursive;
   cursor: pointer;
   border: 1px solid black;
   font-size: 1.25rem;
@@ -59,6 +57,10 @@ const SaveButton = styled.button`
     cursor: not-allowed;
     background-color: #d1d5db;
   }
+`;
+const Board = styled.div`
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr 1fr;
 `;
 const HomeButton = styled.button`
   font-family: 'Abril Fatface', cursive;
@@ -84,24 +86,50 @@ const HomeButton = styled.button`
     background-color: #d1d5db;
   }
 `;
+const LogOutButton = styled.button`
+  font-family: 'Abril Fatface', cursive;
+  cursor: pointer;
+  border: 1px solid black;
+  font-size: 1.25rem;
+  background-color: #a6faff;
+  box-shadow: 2px 2px black;
+  padding: 0.25rem 0.5rem;
+  margin-top: 5px;
+  border-radius: 2rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 150ms;
+  transform: translate(-2px, -2px);
+  &:hover:not([disabled]) {
+    transform: translate(0px, 0px);
+    box-shadow: 0px 0px;
+  }
+  &:disabled {
+    cursor: not-allowed;
+    background-color: #d1d5db;
+  }
+`;
 
 const HEADERS = ['To Do', 'In Progress', 'Complete', 'Reviewed'];
 
 const BoardPage = () => {
-  const {currBoard, setCurrBoard, currBoardID} = useContext(UserContext)
+  const navigate = useNavigate();
+  const { userBoards, currBoard, setCurrBoard, currBoardID, boardName } =
+    useContext(UserContext);
   // initial state of board will be result of get request.
   const [tasks, setTasks] = useState(currBoard);
   const [allUsers, setAllUsers] = useState({});
   const [user, setUser] = useState();
-  const navigate = useNavigate()
+  const navigate = useNavigate();
 
   // Wills 2am idea for storing state of board
   // currBoard is an object and will store tasks, allUsers, and user, as well as boardID and boardName
   // the default state of tasks, allUsers etc. will be set from the currBoard obj
 
   useEffect(() => {
-    setCurrBoard(tasks)
-    console.log(currBoard)
+    setCurrBoard(tasks);
+    // console.log(currBoard);
   }, [tasks]);
 
   useEffect(() => {
@@ -113,8 +141,6 @@ const BoardPage = () => {
       console.log(tasks);
       setTasks(() => tasks);
     }
-
-
 
     function onUserConnected(usersObj) {
       setAllUsers(usersObj);
@@ -284,20 +310,36 @@ const BoardPage = () => {
     }
   }
 
+  const handleLogout = async () => {
+    console.log('Logout Clicked!');
+    try {
+      const logout = await fetch('/auth/logout', {
+        method: 'DELETE',
+        credentials: 'include',
+      });
+      navigate('/');
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const handleHome = () => {
+    navigate('/home');
+  };
+
   return (
     <main>
       <Header>
-        <div>
         <Container>
-          <Title>Scrummy</Title>
+          <Title>{boardName}</Title>
           <CreateCard handleAddTask={handleAddTask} />
           <SaveButton onClick={save}>Save</SaveButton>
         </Container>
-        </div>
-        <div>
-          <HomeButton onClick={() => navigate('/home')} >Go to Home</HomeButton>
-        </div>
-        <OnlineUsers onlineUsers={Object.values(allUsers)} user={user} />
+        <Container>
+          <HomeButton onClick={handleHome}>Go to Home</HomeButton>
+          <LogOutButton onClick={handleLogout}>Log out</LogOutButton>
+          <OnlineUsers onlineUsers={Object.values(allUsers)} user={user} />
+        </Container>
       </Header>
       <Board>
         {tasks.map((columnTasks, i) => (
