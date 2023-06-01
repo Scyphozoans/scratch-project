@@ -54,7 +54,9 @@ userController.verifyUser = async (req, res, next) => {
       if (user && pwMatch) {
         res.locals.userID = user._id.toString();
         res.locals.user = user;
-        console.log('THIS IS USER.BOARDS', user.boards);
+
+        res.locals.boards = JSON.stringify(Array.from(user.boards));
+        console.log(res.locals.boards);
         return next();
       } else return next({ err: 'Invalid credentials.' });
     } catch (error) {
