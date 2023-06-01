@@ -24,7 +24,9 @@ boardController.createBoard = async (req, res, next) => {
 
     // add board id and name to user 
     user.addBoard(id, boardName);
-
+    board.users.push(ssid);
+    board.save();
+    console.log(board.users);
     // send board info on res locals
     res.locals.board = board;
     console.log(res.locals.board);
@@ -71,11 +73,16 @@ boardController.deleteBoard = async (req, res, next) => {
 // };
 
 boardController.getBoardData = async (req, res, next) => {
+  console.log('NOW IN GET BOARD DATA')
   const { boardID } = req.query;
   try {
     const board = await Board.findById(boardID);
-    const { storage } = board;
+    const { storage, users } = board;
+    // add users later
     res.locals.board = storage;
+    res.locals.users = users;
+    console.log('BOARD.STORAGE:', storage);
+    console.log('BOARD.USERS:', users);
     return next();
   } catch (error) {
     console.log(error);
@@ -84,10 +91,12 @@ boardController.getBoardData = async (req, res, next) => {
 };
 
 boardController.updateBoard = async (req, res, next) => {
-  const { boardID, storage } = req.body;
+  console.log('We are in UPDATEBOARD');
+  const { boardID } = req.query;
+  const { storage } = req.body;
   try {
     const board = await Board.findByIdAndUpdate(boardID, { storage });
-    res.locals.board = board;
+    board.save();
     return next();
   } catch (error) {
     console.log(error);
@@ -95,4 +104,22 @@ boardController.updateBoard = async (req, res, next) => {
   }
 };
 
+boardController.updateBoardUsers = async (req, res, next) => {
+  console.log('We are in UPDATE BOARD USERS');
+  const { boardID } = req.query;
+  const { username } = req.body;
+  try {
+    const board = await Board.findById(boardID);
+    const user = await User.findOne({username: username});
+    board.users.push(user.id);
+    board.save();
+    console.log(board.users);
+    user.addBoard(boardID, board.boardName);
+    console.log(user.boards);
+    return next();
+  } catch (error) {
+    console.log(error);
+    return next({ err: 'Error updating board data.' });
+  }
+}
 module.exports = boardController;
