@@ -113,9 +113,6 @@ const [hasError,setHasError] = useState(false)
         body: JSON.stringify(loginUserData),
       });
       const data = await fetchResponse.json();
-      
-      console.log(data)
-    //   setClientData(data);
     if(fetchResponse.ok) navigate('/home');
   
     } catch (error) {
@@ -144,7 +141,7 @@ const [hasError,setHasError] = useState(false)
         <Input
           name="email"
           ref={emailRef}
-          type="password"
+          type="text"
           placeholder="email"
         ></Input>
         {hasError && <Error> there was an error </Error>}

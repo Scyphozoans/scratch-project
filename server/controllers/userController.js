@@ -6,10 +6,9 @@ const userController = {};
 // CREATE-USER: Obtain username and password from the request body, create a new User and save username and password into the database with User schema
 
 userController.createUser = async (req, res, next) => {
-  console.log(req.body);  
+  
+  // destructure req body
   const { body } = req;
-    // use create in DB with body
-
     
     // create a new user 
     try {
@@ -22,9 +21,15 @@ userController.createUser = async (req, res, next) => {
       if (!body.username || !body.password) {
         return next({err: 'Invalid username/password input.'});
       }
+
+      // create a new user
       const user = await User.create(body);
+
+      // store user info on locals
       res.locals.userID = user._id.toString();
       res.locals.user = user;
+
+      // move to next middleware
       return next();
     } catch (error) {
       console.log(error);
@@ -49,6 +54,7 @@ userController.verifyUser = async (req, res, next) => {
       if (user && pwMatch) {
         res.locals.userID = user._id.toString();
         res.locals.user = user;
+        console.log('THIS IS USER.BOARDS', user.boards);
         return next();
       } else return next({ err: 'Invalid credentials.' });
     } catch (error) {

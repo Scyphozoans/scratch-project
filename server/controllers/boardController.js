@@ -1,7 +1,38 @@
 const Board = require('../models/boardModel');
 const User = require('../models/userModel');
-
+const Session = require('../models/sessionModel')
 const boardController = {};
+
+boardController.createBoard = async (req, res, next) => {
+
+  // pull board name from request body
+  const { boardName } = req.body;
+
+  // pull ssid from cookies
+  const { ssid } = req.cookies;
+   
+  try {
+    
+    // create new board with board name
+    const board = await Board.create({boardName});
+
+    // destructure board id
+    const { id } = board;
+
+    // find user that created the board
+    const user = await User.findById({_id: ssid});
+
+    // add board id and name to user 
+    user.boards[id] = boardName;
+
+    // send board info on res locals
+    res.locals.board = board;
+    return next();
+  } catch (error) {
+    console.log(error);
+    return next({err: 'error in createBoard'});
+  }
+};
 
 // find the associated user from
 boardController.getBoardNames = async (req, res, next) => {
@@ -32,7 +63,6 @@ boardController.getBoardData = async (req, res, next) => {
 
 boardController.deleteBoard = async (req, res, next) => {
   const { boardID } = req.params;
-
   try {
     await Board.findOneAndDelete({ boardID });
     return next();
@@ -42,24 +72,6 @@ boardController.deleteBoard = async (req, res, next) => {
   }
 };
 
-boardController.createBoard = async (req, res, next) => {
-  const { boardname } = req.body;
-  console.log('***********boardname: ' + boardname);
-
-  // const boardExists = await Board.findOne({ boardName: boardName });
-  // if (boardExists) {
-  //   res.status(400).send('Board already exists, choose a new board name.');
-  // }
-
-  try {
-    const board = await Board.create({ boardname });
-    res.locals.board = board;
-    return next();
-  } catch (error) {
-    console.log('Error creating new board.');
-    return next({ error });
-  }
-};
 
 boardController.updateBoard = async (req, res, next) => {
   const { boardID, storage } = req.body;
