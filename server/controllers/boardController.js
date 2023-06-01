@@ -75,6 +75,7 @@ boardController.getBoardData = async (req, res, next) => {
   try {
     const board = await Board.findById(boardID);
     const { storage } = board;
+    // add users later
     res.locals.board = storage;
     return next();
   } catch (error) {
@@ -84,9 +85,10 @@ boardController.getBoardData = async (req, res, next) => {
 };
 
 boardController.updateBoard = async (req, res, next) => {
-  const { boardID, storage } = req.body;
+  const { boardID, storage } = req.query;
   try {
     const board = await Board.findByIdAndUpdate(boardID, { storage });
+    
     res.locals.board = board;
     return next();
   } catch (error) {

@@ -89,7 +89,7 @@ app.post('/board/create',
 //   }
 // );
 
-// GET BOARD DATA
+// GET BOARD DATA, BOARD ID WILL BE PULL FROM REQ QUERY
 app.get('/board',
   boardController.getBoardData,
   (req, res) => {
@@ -97,18 +97,18 @@ app.get('/board',
   }
 );
 
+// UPDATE BOARD
+app.put('/board', 
+  boardController.updateBoard, 
+  (req, res) => {
+    res.sendStatus(200);
+});
+
 // DELETE BOARD
 app.delete('/board/:boardID', 
 boardController.deleteBoard, 
 (req, res) => {
   res.sendStatus(200);
-});
-
-// UPDATE BOARD
-app.put('/board/:boardID', 
-boardController.updateBoard, 
-(req, res) => {
-  res.status(200).json(res.locals.board);
 });
 
 //redirect to enable client-side routing
