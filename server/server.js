@@ -5,6 +5,7 @@ const socketIO = require('socket.io');
 const path = require('path');
 const cookieParser = require('cookie-parser');
 const session = require('express-session');
+const bodyParser = require('body-parser');
 
 //---------IMPORT CONTROLLERS--------//
 const userController = require('./controllers/userController.js');
@@ -25,6 +26,7 @@ const app = express();
 const server = http.Server(app);
 app.use(cookieParser());
 app.use(express.json());
+app.use(bodyParser.urlencoded({ extended: true }));
 
 // import PORT from .env file
 const PORT = process.env.PORT || 8080;
@@ -83,7 +85,7 @@ app.post(
   cookieController.setSSIDCookie,
   sessionController.startSession,
   (req, res) => {
-    // res.locals.user = user data, 
+    // res.locals.user = user data,
     // res.locals.userID = user._id
     // res.locals.session = session
     return res.status(200).json(res.locals.user); // maybe redirect to user profile page
@@ -97,46 +99,31 @@ app.delete('/auth/logout', sessionController.endSession, (req, res) => {
   res.status(200).send('Successful logout.');
 });
 
-//*****************BOARD ROUTES*****************/ 
+//*****************BOARD ROUTES*****************/
 
 // GET BOARD NAMES
-app.get('/board/:userID',
-  boardController.getBoardNames,
-  (req, res) => {
-    res.status(200).json(res.locals.boardArray);
-  }
-);
+app.get('/board/:userID', boardController.getBoardNames, (req, res) => {
+  res.status(200).json(res.locals.boardArray);
+});
 
 // GET BOARD DATA
-app.get('/board/:boardID',
-  boardController.getBoardData,
-  (req, res) => {
-    res.status(200).json(res.locals.board);
-  }
-);
+app.get('/board/:boardID', boardController.getBoardData, (req, res) => {
+  res.status(200).json(res.locals.board);
+});
 // DELETE BOARD
-app.delete('/board/:boardID',
-  boardController.deleteBoard,
-  (req, res) => {
-    res.sendStatus(200);
-  }
-);
+app.delete('/board/:boardID', boardController.deleteBoard, (req, res) => {
+  res.sendStatus(200);
+});
 
 // UPDATE BOARD
-app.put('/board/:boardID',
-  boardController.updateBoard,
-  (req, res) => {
-    res.status(200).json(res.locals.board);
-  }
-);
+app.put('/board/:boardID', boardController.updateBoard, (req, res) => {
+  res.status(200).json(res.locals.board);
+});
 
 // CREATE BOARD
-app.post('/board/create',
-  boardController.createBoard,
-  (req, res) => {
-    res.status(200).json(res.locals.board);
-  }
-);
+app.post('/board/create', boardController.createBoard, (req, res) => {
+  res.status(200).json(res.locals.board);
+});
 
 // SET UP UNKNOWN ROUTES
 
