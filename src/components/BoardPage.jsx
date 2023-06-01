@@ -5,12 +5,11 @@ import CreateCard from './CreateCard';
 import Column from './Column';
 import styled, { keyframes } from 'styled-components';
 import { UserContext } from '../userContext';
+import { useNavigate } from 'react-router-dom';
 
 const Header = styled.div`
-  /* border: 2px solid red; */
   display: flex;
   justify-content: space-between;
-  /* gap: 50%; */
   align-items: center;
   padding: 10px 10px;
   background-color: #ffffff;
@@ -38,7 +37,7 @@ const Board = styled.div`
   grid-template-columns: 1fr 1fr 1fr 1fr;
 `;
 const SaveButton = styled.button`
-  font-family: 'Abril Fatface', cursive;
+    font-family: 'Abril Fatface', cursive;
   cursor: pointer;
   border: 1px solid black;
   font-size: 1.25rem;
@@ -89,19 +88,20 @@ const HomeButton = styled.button`
 const HEADERS = ['To Do', 'In Progress', 'Complete', 'Reviewed'];
 
 const BoardPage = () => {
-  const { currBoard, setCurrBoard, currBoardID } = useContext(UserContext);
+  const {currBoard, setCurrBoard, currBoardID} = useContext(UserContext)
   // initial state of board will be result of get request.
   const [tasks, setTasks] = useState(currBoard);
   const [allUsers, setAllUsers] = useState({});
   const [user, setUser] = useState();
+  const navigate = useNavigate()
 
   // Wills 2am idea for storing state of board
   // currBoard is an object and will store tasks, allUsers, and user, as well as boardID and boardName
   // the default state of tasks, allUsers etc. will be set from the currBoard obj
 
   useEffect(() => {
-    setCurrBoard(tasks);
-    console.log(currBoard);
+    setCurrBoard(tasks)
+    console.log(currBoard)
   }, [tasks]);
 
   useEffect(() => {
@@ -113,6 +113,8 @@ const BoardPage = () => {
       console.log(tasks);
       setTasks(() => tasks);
     }
+
+
 
     function onUserConnected(usersObj) {
       setAllUsers(usersObj);
@@ -286,14 +288,14 @@ const BoardPage = () => {
     <main>
       <Header>
         <div>
-          <Container>
-            <Title>Scrummy</Title>
-            <CreateCard handleAddTask={handleAddTask} />
-            <SaveButton onClick={save}>Save</SaveButton>
-          </Container>
+        <Container>
+          <Title>Scrummy</Title>
+          <CreateCard handleAddTask={handleAddTask} />
+          <SaveButton onClick={save}>Save</SaveButton>
+        </Container>
         </div>
         <div>
-          <HomeButton>Go to Home</HomeButton>
+          <HomeButton onClick={() => navigate('/home')} >Go to Home</HomeButton>
         </div>
         <OnlineUsers onlineUsers={Object.values(allUsers)} user={user} />
       </Header>
