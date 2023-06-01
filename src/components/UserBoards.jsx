@@ -93,7 +93,7 @@ const Input = styled.input`
 /********************************* Component **************************************/
 
 const Boards = () => {
-  const { userBoards, setUserBoards, setCurrBoard } = useContext(UserContext)
+  const { userBoards, setUserBoards, setCurrBoard, setCurrBoardID } = useContext(UserContext)
   const createBoardRef = useRef(null)
 
   const navigate = useNavigate();
@@ -135,6 +135,7 @@ const Boards = () => {
       
       if(response.ok){
         setCurrBoard(data)
+        setCurrBoardID(boardObj.boardID)
         navigate("/board")
         console.log(data)
       }

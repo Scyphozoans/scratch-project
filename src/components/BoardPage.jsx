@@ -35,11 +35,34 @@ const Board = styled.div`
   display: grid;
   grid-template-columns: 1fr 1fr 1fr 1fr;
 `;
-
+const SaveButton = styled.button`
+    font-family: 'Abril Fatface', cursive;
+  cursor: pointer;
+  border: 1px solid black;
+  font-size: 1.25rem;
+  background-color: #fea6f6;
+  box-shadow: 2px 2px black;
+  padding: 0.25rem 0.5rem;
+  border-radius: 2rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 150ms;
+  transform: translate(-2px, -2px);
+  margin-top: 5px;
+  &:hover:not([disabled]) {
+    transform: translate(0px, 0px);
+    box-shadow: 0px 0px;
+  }
+  &:disabled {
+    cursor: not-allowed;
+    background-color: #d1d5db;
+  }
+`
 const HEADERS = ['To Do', 'In Progress', 'Complete', 'Reviewed'];
 
 const BoardPage = () => {
-  const {currBoard, setCurrBoard} = useContext(UserContext)
+  const {currBoard, setCurrBoard, currBoardID} = useContext(UserContext)
   // initial state of board will be result of get request.
   const [tasks, setTasks] = useState(currBoard);
   const [allUsers, setAllUsers] = useState({});
@@ -209,12 +232,38 @@ const BoardPage = () => {
     socket.emit('move-task-right', uuid);
   }
 
+  //function to send put request on save
+  async function save(e){
+    e.preventDefault();
+    const saveData = {
+      storage: currBoard
+    }
+    try {
+      const putURL = `/board?boardID=${currBoardID}`;
+      const fetchResponse = await fetch(putURL, {
+        method: 'PUT',
+        headers: {
+          Accept: 'application/json',
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(saveData),
+      });
+      const data = await fetchResponse.json();
+      if(fetchResponse.ok){
+      console.log("saved")
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
   return (
     <main>
       <Header>
         <Container>
           <Title>Scrummy</Title>
           <CreateCard handleAddTask={handleAddTask} />
+          <SaveButton onClick={save}>Save</SaveButton>
         </Container>
         <OnlineUsers onlineUsers={Object.values(allUsers)} user={user} />
       </Header>

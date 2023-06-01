@@ -6,6 +6,7 @@ export const UserProvider = ({children}) => {
     const [username, setUsername] = useState("")
     const [userBoards, setUserBoards] = useState([])
     const [currBoard, setCurrBoard] = useState({})
+    const [currBoardID, setCurrBoardID] = useState("")
 
     const contextProps = {
         username,
@@ -13,7 +14,9 @@ export const UserProvider = ({children}) => {
         userBoards,
         setUserBoards,
         currBoard,
-        setCurrBoard
+        setCurrBoard,
+        currBoardID,
+        setCurrBoardID
     }
     return (
         <UserContext.Provider value ={contextProps}>

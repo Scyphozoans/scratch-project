@@ -93,6 +93,7 @@ boardController.getBoardData = async (req, res, next) => {
 boardController.updateBoard = async (req, res, next) => {
   console.log('We are in UPDATEBOARD');
   const { boardID } = req.query;
+  console.log(boardID)
   const { storage } = req.body;
   try {
     const board = await Board.findByIdAndUpdate(boardID, { storage });
