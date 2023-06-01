@@ -1,6 +1,7 @@
-import React, { useRef, useState } from 'react';
+import React, { useContext, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styled, { keyframes } from 'styled-components';
+import { UserContext } from '../userContext';
 
 const gridAnimation = keyframes`
   0% { background-position:  0%; }
@@ -84,6 +85,7 @@ const ButtonContainer = styled.div`
 `;
 
 const Login = () => {2
+  const {username, setUsername} = useContext(UserContext)
   const [hasError,setHasError] = useState(false)
   const usernameRef = useRef('');
   const passwordRef = useRef('');
@@ -108,6 +110,7 @@ const Login = () => {2
       const data = await fetchResponse.json();
       console.log(data);
       if(fetchResponse.ok){
+      setUsername(data.username)
       navigate('/home')
       }
       // setClientData(data);
