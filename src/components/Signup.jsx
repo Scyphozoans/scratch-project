@@ -1,7 +1,7 @@
 import React, { useContext, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styled, { keyframes } from 'styled-components';
-import UserContext from '../userContext';
+import { UserContext } from '../userContext';
 
 
 const gridAnimation = keyframes`
@@ -86,7 +86,7 @@ const ButtonContainer = styled.div`
 `;
 
 const Signup = () => {
-// const {username, setUsername} = useContext(UserContext)
+const {username, setUsername} = useContext(UserContext)
 const [hasError,setHasError] = useState(false)
   const usernameRef = useRef('');
   const passwordRef = useRef('');
@@ -99,10 +99,10 @@ const [hasError,setHasError] = useState(false)
       password: passwordRef.current.value,
       email: emailRef.current.value
     };
-    console.log(loginUserData);
+    setUsername(loginUserData.username)
+    await console.log('this is in state', username);
     e.preventDefault();
     try {
-      
       const postURL = '/auth/signup';
       const fetchResponse = await fetch(postURL, {
         method: 'POST',

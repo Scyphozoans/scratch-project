@@ -1,8 +1,9 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { Link } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
 import UserBoards from './UserBoards';
 import styled from 'styled-components';
+import { UserContext } from '../userContext';
 
 const Page = styled.div`
   font-family: 'Abril Fatface', cursive;
@@ -42,7 +43,7 @@ const Header = styled.header`
 `;
 
 const Button = styled.button`
-font-family: 'Abril Fatface', cursive;
+  font-family: 'Abril Fatface', cursive;
   cursor: pointer;
   border: 1px solid black;
   font-size: 1.25rem;
@@ -66,6 +67,7 @@ font-family: 'Abril Fatface', cursive;
 `;
 
 const HomePage = () => {
+  const { username } = useContext(UserContext);
   const navigate = useNavigate();
   const handleLogout = async () => {
     console.log('Logout Clicked!');
@@ -78,16 +80,14 @@ const HomePage = () => {
     } catch (error) {
       console.log(error);
     }
-  }
+  };
 
   return (
     <Page>
       <Header>
         <nav>
-          <Li>User</Li>
-          <Button 
-            onClick={handleLogout}
-          >Log out</Button>
+          <Li>{username}</Li>
+          <Button onClick={handleLogout}>Log out</Button>
         </nav>
       </Header>
       <UserBoards></UserBoards>

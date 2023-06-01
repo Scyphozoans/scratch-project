@@ -5,7 +5,7 @@ const socketIO = require('socket.io');
 const path = require('path');
 const cookieParser = require('cookie-parser');
 const session = require('express-session');
-const bodyParser = require('body-parser')
+const bodyParser = require('body-parser');
 
 //---------IMPORT CONTROLLERS--------//
 const userController = require('./controllers/userController.js');
@@ -63,7 +63,7 @@ app.post(
   cookieController.setSSIDCookie,
   sessionController.startSession,
   (req, res) => {
-    // res.locals.user = user data, 
+    // res.locals.user = user data,
     // res.locals.userID = user._id
     // res.locals.session = session
     return res.status(200).json(res.locals.user); // maybe redirect to user profile page
@@ -76,7 +76,7 @@ app.delete('/auth/logout', sessionController.endSession, (req, res) => {
   res.status(200).send('Successful logout.');
 });
 
-//*****************BOARD ROUTES*****************/ 
+//*****************BOARD ROUTES*****************/
 
 // CREATE BOARD
 app.post('/board/create',
@@ -102,20 +102,14 @@ app.get('/board/:boardID',
   }
 );
 // DELETE BOARD
-app.delete('/board/:boardID',
-  boardController.deleteBoard,
-  (req, res) => {
-    res.sendStatus(200);
-  }
-);
+app.delete('/board/:boardID', boardController.deleteBoard, (req, res) => {
+  res.sendStatus(200);
+});
 
 // UPDATE BOARD
-app.put('/board/:boardID',
-  boardController.updateBoard,
-  (req, res) => {
-    res.status(200).json(res.locals.board);
-  }
-);
+app.put('/board/:boardID', boardController.updateBoard, (req, res) => {
+  res.status(200).json(res.locals.board);
+});
 
 // SET UP UNKNOWN ROUTES
 

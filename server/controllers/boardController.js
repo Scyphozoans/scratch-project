@@ -1,4 +1,4 @@
-const Board = require('../models/boardModel')
+const Board = require('../models/boardModel');
 const User = require('../models/userModel');
 const Session = require('../models/sessionModel')
 const boardController = {};
@@ -44,7 +44,7 @@ boardController.getBoardNames = async (req, res, next) => {
     return next();
   } catch (error) {
     console.log(error);
-    return next({ err: 'Error finding user data' })
+    return next({ err: 'Error finding user data' });
   }
 };
 
@@ -64,13 +64,13 @@ boardController.getBoardData = async (req, res, next) => {
 boardController.deleteBoard = async (req, res, next) => {
   const { boardID } = req.params;
   try {
-    await Board.findOneAndDelete({boardID});
+    await Board.findOneAndDelete({ boardID });
     return next();
   } catch (error) {
     console.log(error);
-    return next({err: 'Error deleting board.'});
+    return next({ err: 'Error deleting board.' });
   }
-}
+};
 
 
 boardController.updateBoard = async (req, res, next) => {
@@ -81,9 +81,8 @@ boardController.updateBoard = async (req, res, next) => {
     return next();
   } catch (error) {
     console.log(error);
-    return next({err: 'Error updating board data.'});
+    return next({ err: 'Error updating board data.' });
   }
-}
-
+};
 
 module.exports = boardController;
