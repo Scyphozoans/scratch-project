@@ -139,13 +139,13 @@ const Boards = () => {
   
 
   // self explanatory
-  const handleClickDirectUserToCorrectBoard = (e,boardID,boardName) => {
+  const handleClickDirectUserToCorrectBoard = (e) => {
     e.preventDefault()
     //SEE wills NOTE IN BOARDPAGE
-    setCurrBoard((prev) => {
-      prev.boardID = boardID
-      prev.boardName = boardName}
-    )
+    // setCurrBoard((prev) => {
+    //   prev.boardID = boardID
+    //   prev.boardName = boardName}
+    // )
     navigate("/board");
   };
 
@@ -185,7 +185,7 @@ const Boards = () => {
         {userBoards.map((el, i) => {
           const obj = Object.keys(el)
           return (
-          <Links key={i} name={el[obj[1]]} onClick={handleClickDirectUserToCorrectBoard({ boardName: el[obj[1]], boardID: el[obj[0]]})}  >
+          <Links key={i} name={el[obj[1]]} onClick={handleClickDirectUserToCorrectBoard}  >
             {el[obj[1]]}
             <button onClick={(e) => handleClickDeleteBoard({ boardName: el[obj[1]], boardID: el[obj[0]]})}>X</button>
           </Links>
