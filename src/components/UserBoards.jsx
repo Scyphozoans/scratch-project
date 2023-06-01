@@ -1,4 +1,10 @@
-import React, { useContext, useEffect, useState , useRef, createRef } from 'react';
+import React, {
+  useContext,
+  useEffect,
+  useState,
+  useRef,
+  createRef,
+} from 'react';
 import styled, { keyframes } from 'styled-components';
 import { Link } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
@@ -37,12 +43,55 @@ const SelectBoards = styled.div`
   animation-iteration-count: infinite;
 `;
 
+const Links = styled(Link)`
+  list-style-type: none;
+  text-decoration: none;
+  /* border: 2px solid black;
+  background-color: white;
+  box-shadow: 5px 5px black; */
+  color: black;
+  margin: 10px;
+  padding: 0.5rem;
+  display: flex;
+  justify-content: space-between;
+  gap: 0.5rem;
+
+  background-size: 0.7em 0.7em;
+`;
+
+const DeleteButton = styled.button`
+  border: none;
+  background: none;
+  padding: 0 5px 0 5px;
+  margin-right: 15px;
+  margin-top: 2px;
+  &:hover {
+    color: red;
+    cursor: pointer;
+  }
+`;
+const Form = styled.form`
+  display: flex;
+  justify-content: space-between;
+  gap: 3%;
+  margin-top: 20px;
+  margin-left: 11px;
+`;
+
+const Input = styled.input`
+  border: 2px solid black;
+  background-color: white;
+  box-shadow: 3px 3px black;
+  width: 120px;
+  height: 25px;
+  margin-right: 5px;
+  padding-left: 5px;
+`;
 const Button = styled.button`
-  /* margin: 20px 0 0 50px; // TODO: Should not hard code pixels; */
   cursor: pointer;
   background-color: #fea6f6;
   text-align: center;
-  /* font-size: 2rem; */
+  font-size: 2rem;
   border-radius: 2rem;
   border: 1px solid black;
   box-shadow: 2px 2px black;
@@ -57,101 +106,67 @@ const Button = styled.button`
   }
 `;
 
-const Links = styled(Link)`
-  list-style-type: none;
-  text-decoration: none;
-  border: 2px solid black;
-  background-color: white;
-  box-shadow: 5px 5px black;
-  margin: 10px;
-  padding: 0.5rem;
+const Div = styled.div`
   display: flex;
   justify-content: space-between;
-  gap: 0.5rem;
+  font-size: 1.2rem;
+  /* justify-content: center; */
+  align-items: center;
+  gap: 10%;
+  height: 50px;
+  border: 2px solid black;
+  background-color: white;
+  box-shadow: 3px 3px black;
   background-image: linear-gradient(
       rgba(0, 0, 0, 0.05) 0.1em,
       transparent 0.1em
     ),
     linear-gradient(90deg, rgba(0, 0, 0, 0.05) 0.1em, transparent 0.1em);
-  background-size: 0.7em 0.7em;
-`;
-
-const Form = styled.form`
-  display: flex;
-  justify-content: space-between;
-  gap: 3%;
-`;
-
-const Input = styled.input`
-  border: 2px solid black;
-  background-color: white;
-  box-shadow: 5px 5px black;
-  margin: 10px;
-  padding: 0.5rem;
+  margin-bottom: 10px;
 `;
 
 /********************************* Component **************************************/
 
 const Boards = () => {
-  const { userBoards, setUserBoards, setCurrBoard } = useContext(UserContext)
-  const createBoardRef = useRef(null)
-
-  // const names = ['Scrummy 1', 'Scrummy 2', 'Scrummy 3'];
+  const { userBoards, setUserBoards, setCurrBoard } = useContext(UserContext);
+  const createBoardRef = useRef(null);
   const navigate = useNavigate();
-
-  // useEffect to populate the boards for the pertaining user on load
-  // useEffect(() => {
-  //   async function fetchBoardNames() {
-  //     try {
-  //       const names = await Model.find({
-  //         name: name;
-  //       })
-  //     } catch (err) {
-  //       console.log(err);
-  //     }
-  //   }
-
-  // }
-  //   fetchBoardNames();
-  // }, []);
 
   // handleClick button to handle deletion of boards
   const handleClickDeleteBoard = async (el) => {
     console.log('deleted');
     console.log(el);
 
-
-      try {
-        const reponse = await fetch(`/board/${el.boardID}`, {
-          method: 'DELETE',
-          headers: {
-            'Content-type': 'application/json; charset=UTF-8',
-          },
-        });
+    try {
+      const reponse = await fetch(`/board/${el.boardID}`, {
+        method: 'DELETE',
+        headers: {
+          'Content-type': 'application/json; charset=UTF-8',
+        },
+      });
       //  const data = await response.json() backend send deleted boardname plz
-        setUserBoards((prevUserBoards) =>
+      setUserBoards((prevUserBoards) =>
         prevUserBoards.filter((board) => board[1] !== el.boardName)
-      )
-      } catch (err) {
-        console.log(err);
-      }
-    };
-  
+      );
+    } catch (err) {
+      console.log(err);
+    }
+  };
 
   // self explanatory
   const handleClickDirectUserToCorrectBoard = (e) => {
-    e.preventDefault()
+    e.preventDefault();
     //SEE wills NOTE IN BOARDPAGE
     // setCurrBoard((prev) => {
     //   prev.boardID = boardID
     //   prev.boardName = boardName}
     // )
-    navigate("/board");
+    navigate('/board');
   };
 
   // handleClick function to add new board to database and redirect you to new board
   const handleSubmit = (e) => {
-    e.preventDefault()
+    e.preventDefault();
     async function postNewBoard() {
       try {
         const response = await fetch('/board/create', {
@@ -164,9 +179,9 @@ const Boards = () => {
             'Content-type': 'application/json; charset=UTF-8',
           },
         });
-        const data = await response.json()
-        if(response.ok){
-          setUserBoards([...userBoards,[data._id,data.boardName]])
+        const data = await response.json();
+        if (response.ok) {
+          setUserBoards([...userBoards, [data._id, data.boardName]]);
         }
       } catch (err) {
         console.log(err);
@@ -176,22 +191,34 @@ const Boards = () => {
     // navigate('/board');
   };
 
-  
-
   return (
     <SelectBoards>
       <Header>Scrummies</Header>
       <div>
         {userBoards.map((el, i) => {
-          const obj = Object.keys(el)
+          const obj = Object.keys(el);
           return (
-          <Links key={i} name={el[obj[1]]} onClick={handleClickDirectUserToCorrectBoard}  >
-            {el[obj[1]]}
-            <button onClick={(e) => handleClickDeleteBoard({ boardName: el[obj[1]], boardID: el[obj[0]]})}>X</button>
-          </Links>
-          )
-})}
-        {/* <Link to="/board">Create new board</Link> */}
+            <Div>
+              <Links
+                key={i}
+                name={el[obj[1]]}
+                onClick={handleClickDirectUserToCorrectBoard}
+              >
+                {el[obj[1]]}
+              </Links>
+              <DeleteButton
+                onClick={(e) =>
+                  handleClickDeleteBoard({
+                    boardName: el[obj[1]],
+                    boardID: el[obj[0]],
+                  })
+                }
+              >
+                X
+              </DeleteButton>
+            </Div>
+          );
+        })}
         <Form onSubmit={handleSubmit}>
           <Input
             type="text"
@@ -202,9 +229,9 @@ const Boards = () => {
           <Button type="submit">
             <svg
               xmlns="http://www.w3.org/2000/svg"
-              height="48"
+              height="28"
               viewBox="0 -960 960 960"
-              width="48"
+              width="29"
             >
               <path d="M450-200v-250H200v-60h250v-250h60v250h250v60H510v250h-60Z" />
             </svg>
