@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import styled, { keyframes } from 'styled-components';
+import { Link } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
-/* TODO: need to require correct model/database */
+import boardModel from '../../server/models/boardModel';
 
 const gridAnimation = keyframes`
   0% { background-position:  0%; }
@@ -36,11 +37,11 @@ const SelectBoards = styled.div`
 `;
 
 const Button = styled.button`
-  margin: 20px 0 0 50px; // TODO: Should not hard code pixels;
+  /* margin: 20px 0 0 50px; // TODO: Should not hard code pixels; */
   cursor: pointer;
   background-color: #fea6f6;
   text-align: center;
-  font-size: 2rem;
+  /* font-size: 2rem; */
   border-radius: 2rem;
   border: 1px solid black;
   box-shadow: 2px 2px black;
@@ -55,8 +56,9 @@ const Button = styled.button`
   }
 `;
 
-const Li = styled.li`
+const Links = styled(Link)`
   list-style-type: none;
+  text-decoration: none;
   border: 2px solid black;
   background-color: white;
   box-shadow: 5px 5px black;
@@ -73,11 +75,28 @@ const Li = styled.li`
   background-size: 0.7em 0.7em;
 `;
 
+const Form = styled.form`
+  display: flex;
+  justify-content: space-between;
+  gap: 3%;
+`;
+
+const Input = styled.input`
+  border: 2px solid black;
+  background-color: white;
+  box-shadow: 5px 5px black;
+  margin: 10px;
+  padding: 0.5rem;
+`;
+
 /********************************* Component **************************************/
 
 const Boards = () => {
-  // const [names, setNames] = useState([]);
+  const [boardName, setBoardName] = useState('');
+  const names = ['Scrummy 1', 'Scrummy 2', 'Scrummy 3'];
+  const navigate = useNavigate();
 
+  // useEffect to populate the boards for the pertaining user on load
   // useEffect(() => {
   //   async function fetchBoardNames() {
   //     try {
@@ -92,11 +111,11 @@ const Boards = () => {
   // }
   //   fetchBoardNames();
   // }, []);
-  const [boardName, setBoardName] = useState('');
-  const names = ['Scrummy 1', 'Scrummy 2', 'Scrummy 3'];
-  const navigate = useNavigate();
+
+  // handleClick button to handle deletion of boards
   const handleClickDeleteBoard = (e) => {
-    setBoardName(e.target.value);
+    console.log('deleted');
+    console.log(e);
     async function deleteBoard() {
       try {
         const reponse = await fetch(`/board/${boardName}`, {
@@ -109,7 +128,33 @@ const Boards = () => {
         console.log(err);
       }
     }
-    handleClickDeleteBoard();
+  };
+
+  // self explanatory
+  const handleClickDirectUserToCorrectBoard = () => {
+    console.log('wsap');
+  };
+
+  // handleClick function to add new board to database and redirect you to new board
+  const handleSubmit = () => {
+    async function postNewBoard() {
+      try {
+        const response = await fetch('/board/create', {
+          method: 'POST',
+          body: JSON.stringify({
+            boardname: boardName,
+            users: 'test',
+          }),
+          headers: {
+            'Content-type': 'application/json; charset=UTF-8',
+          },
+        });
+      } catch (err) {
+        console.log(err);
+      }
+    }
+    postNewBoard();
+    navigate('/board');
   };
 
   return (
@@ -117,22 +162,30 @@ const Boards = () => {
       <Header>Scrummies</Header>
       <div>
         {names.map((e, i) => (
-          <Li index={i}>
+          <Links key={i} onClick={() => handleClickDirectUserToCorrectBoard()}>
             {e}
-            <button onClick={() => handleClickDeleteBoard()}>X</button>
-          </Li>
+            <button onClick={(e) => handleClickDeleteBoard(e)}>X</button>
+          </Links>
         ))}
         {/* <Link to="/board">Create new board</Link> */}
-        <Button onClick={() => navigate('/board')}>
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            height="48"
-            viewBox="0 -960 960 960"
-            width="48"
-          >
-            <path d="M450-200v-250H200v-60h250v-250h60v250h250v60H510v250h-60Z" />
-          </svg>
-        </Button>
+        <Form onSubmit={() => handleSubmit()}>
+          <Input
+            type="text"
+            name="boardname" // TODO: not sure if this is the correct property from body
+            placeholder="board name..."
+            onChange={(e) => setBoardName(e.target.value)}
+          ></Input>
+          <Button type="submit">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              height="48"
+              viewBox="0 -960 960 960"
+              width="48"
+            >
+              <path d="M450-200v-250H200v-60h250v-250h60v250h250v60H510v250h-60Z" />
+            </svg>
+          </Button>
+        </Form>
       </div>
     </SelectBoards>
   );

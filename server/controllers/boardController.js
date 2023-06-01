@@ -1,4 +1,4 @@
-const Board = require('../models/boardModel')
+const Board = require('../models/boardModel');
 const User = require('../models/userModel');
 
 const boardController = {};
@@ -13,7 +13,7 @@ boardController.getBoardNames = async (req, res, next) => {
     return next();
   } catch (error) {
     console.log(error);
-    return next({ err: 'Error finding user data' })
+    return next({ err: 'Error finding user data' });
   }
 };
 
@@ -28,37 +28,38 @@ boardController.getBoardData = async (req, res, next) => {
     console.log(error);
     return next({ err: 'Error getting board data' });
   }
-}
+};
 
 boardController.deleteBoard = async (req, res, next) => {
   const { boardID } = req.params;
-  
+
   try {
-    await Board.findOneAndDelete({boardID});
+    await Board.findOneAndDelete({ boardID });
     return next();
   } catch (error) {
     console.log(error);
-    return next({err: 'Error deleting board.'});
+    return next({ err: 'Error deleting board.' });
   }
-}
+};
 
 boardController.createBoard = async (req, res, next) => {
-  const {body} = req;
-  
-  const boardExists = await Board.findOne({boardName: body.boardName});
-  if (boardExists) {
-    res.status(400).send('Board already exists, choose a new board name.');
-  }
-  
+  const { boardname } = req.body;
+  console.log('***********boardname: ' + boardname);
+
+  // const boardExists = await Board.findOne({ boardName: boardName });
+  // if (boardExists) {
+  //   res.status(400).send('Board already exists, choose a new board name.');
+  // }
+
   try {
-    const board = await Board.create(body);
+    const board = await Board.create({ boardname });
     res.locals.board = board;
     return next();
   } catch (error) {
     console.log('Error creating new board.');
-    return next({error});
+    return next({ error });
   }
-}
+};
 
 boardController.updateBoard = async (req, res, next) => {
   const { boardID, storage } = req.body;
@@ -68,9 +69,8 @@ boardController.updateBoard = async (req, res, next) => {
     return next();
   } catch (error) {
     console.log(error);
-    return next({err: 'Error updating board data.'});
+    return next({ err: 'Error updating board data.' });
   }
-}
-
+};
 
 module.exports = boardController;
