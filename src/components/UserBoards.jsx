@@ -224,7 +224,12 @@ const Boards = () => {
               <Links
                 key={i}
                 name={el[obj[1]]}
-                onClick={handleClickDirectUserToCorrectBoard}
+                onClick={(e) =>
+                  handleClickDirectUserToCorrectBoard(e, {
+                    boardName: el[obj[1]],
+                    boardID: el[obj[0]],
+                  })
+                }
               >
                 {el[obj[1]]}
               </Links>

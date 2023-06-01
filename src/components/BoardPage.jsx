@@ -7,8 +7,10 @@ import styled, { keyframes } from 'styled-components';
 import { UserContext } from '../userContext';
 
 const Header = styled.div`
+  /* border: 2px solid red; */
   display: flex;
   justify-content: space-between;
+  /* gap: 50%; */
   align-items: center;
   padding: 10px 10px;
   background-color: #ffffff;
@@ -36,7 +38,7 @@ const Board = styled.div`
   grid-template-columns: 1fr 1fr 1fr 1fr;
 `;
 const SaveButton = styled.button`
-    font-family: 'Abril Fatface', cursive;
+  font-family: 'Abril Fatface', cursive;
   cursor: pointer;
   border: 1px solid black;
   font-size: 1.25rem;
@@ -58,11 +60,36 @@ const SaveButton = styled.button`
     cursor: not-allowed;
     background-color: #d1d5db;
   }
-`
+`;
+const HomeButton = styled.button`
+  font-family: 'Abril Fatface', cursive;
+  cursor: pointer;
+  border: 1px solid black;
+  font-size: 1.25rem;
+  background-color: #fea6f6;
+  box-shadow: 2px 2px black;
+  padding: 0.25rem 0.5rem;
+  border-radius: 2rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 150ms;
+  transform: translate(-2px, -2px);
+  margin-top: 5px;
+  &:hover:not([disabled]) {
+    transform: translate(0px, 0px);
+    box-shadow: 0px 0px;
+  }
+  &:disabled {
+    cursor: not-allowed;
+    background-color: #d1d5db;
+  }
+`;
+
 const HEADERS = ['To Do', 'In Progress', 'Complete', 'Reviewed'];
 
 const BoardPage = () => {
-  const {currBoard, setCurrBoard, currBoardID} = useContext(UserContext)
+  const { currBoard, setCurrBoard, currBoardID } = useContext(UserContext);
   // initial state of board will be result of get request.
   const [tasks, setTasks] = useState(currBoard);
   const [allUsers, setAllUsers] = useState({});
@@ -73,8 +100,8 @@ const BoardPage = () => {
   // the default state of tasks, allUsers etc. will be set from the currBoard obj
 
   useEffect(() => {
-    setCurrBoard(tasks)
-    console.log(currBoard)
+    setCurrBoard(tasks);
+    console.log(currBoard);
   }, [tasks]);
 
   useEffect(() => {
@@ -86,8 +113,6 @@ const BoardPage = () => {
       console.log(tasks);
       setTasks(() => tasks);
     }
-
-
 
     function onUserConnected(usersObj) {
       setAllUsers(usersObj);
@@ -233,11 +258,11 @@ const BoardPage = () => {
   }
 
   //function to send put request on save
-  async function save(e){
+  async function save(e) {
     e.preventDefault();
     const saveData = {
-      storage: currBoard
-    }
+      storage: currBoard,
+    };
     try {
       const putURL = `/board?boardID=${currBoardID}`;
       const fetchResponse = await fetch(putURL, {
@@ -249,8 +274,8 @@ const BoardPage = () => {
         body: JSON.stringify(saveData),
       });
       const data = await fetchResponse.json();
-      if(fetchResponse.ok){
-      console.log("saved")
+      if (fetchResponse.ok) {
+        console.log('saved');
       }
     } catch (error) {
       console.log(error);
@@ -260,11 +285,16 @@ const BoardPage = () => {
   return (
     <main>
       <Header>
-        <Container>
-          <Title>Scrummy</Title>
-          <CreateCard handleAddTask={handleAddTask} />
-          <SaveButton onClick={save}>Save</SaveButton>
-        </Container>
+        <div>
+          <Container>
+            <Title>Scrummy</Title>
+            <CreateCard handleAddTask={handleAddTask} />
+            <SaveButton onClick={save}>Save</SaveButton>
+          </Container>
+        </div>
+        <div>
+          <HomeButton>Go to Home</HomeButton>
+        </div>
         <OnlineUsers onlineUsers={Object.values(allUsers)} user={user} />
       </Header>
       <Board>
