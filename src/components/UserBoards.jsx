@@ -128,8 +128,14 @@ const Div = styled.div`
 /********************************* Component **************************************/
 
 const Boards = () => {
-  const { userBoards, setUserBoards, setCurrBoard, setCurrBoardID } =
-    useContext(UserContext);
+  const {
+    boardName,
+    setBoardName,
+    userBoards,
+    setUserBoards,
+    setCurrBoard,
+    setCurrBoardID,
+  } = useContext(UserContext);
   const createBoardRef = useRef(null);
 
   // const names = ['Scrummy 1', 'Scrummy 2', 'Scrummy 3'];
@@ -160,6 +166,8 @@ const Boards = () => {
   const handleClickDirectUserToCorrectBoard = async (e, boardObj) => {
     e.preventDefault();
     console.log(boardObj.boardID);
+    console.log(userBoards);
+
     try {
       const response = await fetch(`/board?boardID=${boardObj.boardID}`, {
         headers: {
@@ -171,8 +179,9 @@ const Boards = () => {
       if (response.ok) {
         setCurrBoard(data);
         setCurrBoardID(boardObj.boardID);
+        setBoardName(boardObj.boardName);
         navigate('/board');
-        console.log(data);
+        // console.log(data);
       }
     } catch (err) {
       console.log(err);

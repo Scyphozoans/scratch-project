@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useContext } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { socket } from '../socket';
 import OnlineUsers from './OnlineUsers';
 import CreateCard from './CreateCard';
@@ -7,11 +8,10 @@ import styled, { keyframes } from 'styled-components';
 import { UserContext } from '../userContext';
 
 const Header = styled.div`
-  /* border: 2px solid red; */
   display: flex;
   justify-content: space-between;
-  /* gap: 50%; */
-  align-items: center;
+  align-items: flex-start;
+  align-self: flex-start;
   padding: 10px 10px;
   background-color: #ffffff;
   background-image: linear-gradient(
@@ -33,10 +33,6 @@ const Title = styled.h1`
   font-size: 2.2rem;
 `;
 
-const Board = styled.div`
-  display: grid;
-  grid-template-columns: 1fr 1fr 1fr 1fr;
-`;
 const SaveButton = styled.button`
   font-family: 'Abril Fatface', cursive;
   cursor: pointer;
@@ -60,6 +56,10 @@ const SaveButton = styled.button`
     cursor: not-allowed;
     background-color: #d1d5db;
   }
+`;
+const Board = styled.div`
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr 1fr;
 `;
 const HomeButton = styled.button`
   font-family: 'Abril Fatface', cursive;
@@ -85,11 +85,37 @@ const HomeButton = styled.button`
     background-color: #d1d5db;
   }
 `;
+const LogOutButton = styled.button`
+  font-family: 'Abril Fatface', cursive;
+  cursor: pointer;
+  border: 1px solid black;
+  font-size: 1.25rem;
+  background-color: #a6faff;
+  box-shadow: 2px 2px black;
+  padding: 0.25rem 0.5rem;
+  margin-top: 5px;
+  border-radius: 2rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 150ms;
+  transform: translate(-2px, -2px);
+  &:hover:not([disabled]) {
+    transform: translate(0px, 0px);
+    box-shadow: 0px 0px;
+  }
+  &:disabled {
+    cursor: not-allowed;
+    background-color: #d1d5db;
+  }
+`;
 
 const HEADERS = ['To Do', 'In Progress', 'Complete', 'Reviewed'];
 
 const BoardPage = () => {
-  const { currBoard, setCurrBoard, currBoardID } = useContext(UserContext);
+  const navigate = useNavigate();
+  const { userBoards, currBoard, setCurrBoard, currBoardID, boardName } =
+    useContext(UserContext);
   // initial state of board will be result of get request.
   const [tasks, setTasks] = useState(currBoard);
   const [allUsers, setAllUsers] = useState({});
@@ -101,7 +127,7 @@ const BoardPage = () => {
 
   useEffect(() => {
     setCurrBoard(tasks);
-    console.log(currBoard);
+    // console.log(currBoard);
   }, [tasks]);
 
   useEffect(() => {
@@ -282,20 +308,36 @@ const BoardPage = () => {
     }
   }
 
+  const handleLogout = async () => {
+    console.log('Logout Clicked!');
+    try {
+      const logout = await fetch('/auth/logout', {
+        method: 'DELETE',
+        credentials: 'include',
+      });
+      navigate('/');
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const handleHome = () => {
+    navigate('/home');
+  };
+
   return (
     <main>
       <Header>
-        <div>
-          <Container>
-            <Title>Scrummy</Title>
-            <CreateCard handleAddTask={handleAddTask} />
-            <SaveButton onClick={save}>Save</SaveButton>
-          </Container>
-        </div>
-        <div>
-          <HomeButton>Go to Home</HomeButton>
-        </div>
-        <OnlineUsers onlineUsers={Object.values(allUsers)} user={user} />
+        <Container>
+          <Title>{boardName}</Title>
+          <CreateCard handleAddTask={handleAddTask} />
+          <SaveButton onClick={save}>Save</SaveButton>
+        </Container>
+        <Container>
+          <HomeButton onClick={handleHome}>Go to Home</HomeButton>
+          <LogOutButton onClick={handleLogout}>Log out</LogOutButton>
+          <OnlineUsers onlineUsers={Object.values(allUsers)} user={user} />
+        </Container>
       </Header>
       <Board>
         {tasks.map((columnTasks, i) => (
