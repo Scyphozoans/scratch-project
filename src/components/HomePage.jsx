@@ -5,18 +5,13 @@ import UserBoards from './UserBoards';
 import styled from 'styled-components';
 import { UserContext } from '../userContext';
 
-
 const Page = styled.div`
   font-family: 'Abril Fatface', cursive;
   display: flex;
   flex-direction: column;
   justify-content: center;
+  /* align-items: center; */
 `;
-
-// const UserBoardss = styled.UserBoards`
-//   display: flex;
-//   justify-content: center;
-// `;
 
 const Nav = styled.nav`
   display: flex;
@@ -25,6 +20,7 @@ const Nav = styled.nav`
 
 const Li = styled.li`
   list-style-type: none;
+  font-size: 1.5rem;
 `;
 
 const Header = styled.header`
@@ -86,12 +82,10 @@ const HomePage = () => {
   return (
     <Page>
       <Header>
-        <nav>
-          <Li>{username}</Li>
-          <Button onClick={handleLogout}>Log out</Button>
-        </nav>
+        <Li>{username}</Li>
+        <Button onClick={handleLogout}>Log out</Button>
       </Header>
-      <UserBoards/>
+      <UserBoards />
     </Page>
   );
 };
