@@ -1,8 +1,8 @@
-import { createContext, useState } from 'react';
+import React, { createContext, useState } from 'react';
 
-const UserContext = createContext();
+export const UserContext = createContext();
 
-const UserProvider = ({children}) => {
+export const UserProvider = ({children}) => {
     const [username, setUsername] = useState("")
 
     const contextProps = {
@@ -17,4 +17,3 @@ const UserProvider = ({children}) => {
 }
 
 
-export default UserContext;
