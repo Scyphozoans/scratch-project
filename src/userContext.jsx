@@ -4,10 +4,14 @@ export const UserContext = createContext();
 
 export const UserProvider = ({children}) => {
     const [username, setUsername] = useState("")
+    const [userBoards, setUserBoards] = useState([])
+    const [currBoard, setCurrBoard] = useState({})
 
     const contextProps = {
         username,
-        setUsername
+        setUsername,
+        userBoards,
+        setUserBoards
     }
     return (
         <UserContext.Provider value ={contextProps}>

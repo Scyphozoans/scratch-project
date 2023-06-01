@@ -86,7 +86,7 @@ const ButtonContainer = styled.div`
 `;
 
 const Signup = () => {
-const {username, setUsername} = useContext(UserContext)
+const {setUsername, setUserBoards} = useContext(UserContext)
 const [hasError,setHasError] = useState(false)
   const usernameRef = useRef('');
   const passwordRef = useRef('');
@@ -99,8 +99,8 @@ const [hasError,setHasError] = useState(false)
       password: passwordRef.current.value,
       email: emailRef.current.value
     };
-    setUsername(loginUserData.username)
-    await console.log('this is in state', username);
+    
+  
     e.preventDefault();
     try {
       const postURL = '/auth/signup';
@@ -113,8 +113,11 @@ const [hasError,setHasError] = useState(false)
         body: JSON.stringify(loginUserData),
       });
       const data = await fetchResponse.json();
-    if(fetchResponse.ok) navigate('/home');
-  
+    if(fetchResponse.ok) {
+      navigate('/home');
+      setUsername(loginUserData.username)
+      setUserBoards([])
+    }
     } catch (error) {
       // handle error
     setHasError(true)

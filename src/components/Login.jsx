@@ -85,7 +85,7 @@ const ButtonContainer = styled.div`
 `;
 
 const Login = () => {2
-  const {username, setUsername} = useContext(UserContext)
+  const {setUsername, userBoards, setUserBoards} = useContext(UserContext)
   const [hasError,setHasError] = useState(false)
   const usernameRef = useRef('');
   const passwordRef = useRef('');
@@ -111,6 +111,7 @@ const Login = () => {2
       console.log(data);
       if(fetchResponse.ok){
       setUsername(data.username)
+      setUserBoards(Object.entries(data.boards))
       navigate('/home')
       }
       // setClientData(data);
