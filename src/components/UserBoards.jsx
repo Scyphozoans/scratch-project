@@ -1,9 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import styled, { keyframes } from 'styled-components';
+import { Link } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
 import boardModel from '../../server/models/boardModel';
-
-/* TODO: need to require correct model/database */
 
 const gridAnimation = keyframes`
   0% { background-position:  0%; }
@@ -57,8 +56,9 @@ const Button = styled.button`
   }
 `;
 
-const Li = styled.li`
+const Links = styled(Link)`
   list-style-type: none;
+  text-decoration: none;
   border: 2px solid black;
   background-color: white;
   box-shadow: 5px 5px black;
@@ -96,6 +96,7 @@ const Boards = () => {
   const names = ['Scrummy 1', 'Scrummy 2', 'Scrummy 3'];
   const navigate = useNavigate();
 
+  // useEffect to populate the boards for the pertaining user on load
   // useEffect(() => {
   //   async function fetchBoardNames() {
   //     try {
@@ -129,6 +130,11 @@ const Boards = () => {
     }
   };
 
+  // self explanatory
+  const handleClickDirectUserToCorrectBoard = () => {
+    console.log('wsap');
+  };
+
   // handleClick function to add new board to database and redirect you to new board
   const handleSubmit = () => {
     async function postNewBoard() {
@@ -156,16 +162,16 @@ const Boards = () => {
       <Header>Scrummies</Header>
       <div>
         {names.map((e, i) => (
-          <Li key={i}>
+          <Links key={i} onClick={() => handleClickDirectUserToCorrectBoard()}>
             {e}
             <button onClick={(e) => handleClickDeleteBoard(e)}>X</button>
-          </Li>
+          </Links>
         ))}
         {/* <Link to="/board">Create new board</Link> */}
         <Form onSubmit={() => handleSubmit()}>
           <Input
             type="text"
-            name="boardName" // TODO: not sure if this is the correct property from body
+            name="boardname" // TODO: not sure if this is the correct property from body
             placeholder="board name..."
             onChange={(e) => setBoardName(e.target.value)}
           ></Input>

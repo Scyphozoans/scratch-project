@@ -42,7 +42,7 @@ const Header = styled.header`
 `;
 
 const Button = styled.button`
-font-family: 'Abril Fatface', cursive;
+  font-family: 'Abril Fatface', cursive;
   cursor: pointer;
   border: 1px solid black;
   font-size: 1.25rem;
@@ -78,17 +78,13 @@ const HomePage = () => {
     } catch (error) {
       console.log(error);
     }
-  }
+  };
 
   return (
     <Page>
       <Header>
-        <nav>
-          <Li>User</Li>
-          <Button 
-            onClick={handleLogout}
-          >Log out</Button>
-        </nav>
+        <Li>User</Li>
+        <Button onClick={handleLogout}>Log out</Button>
       </Header>
       <UserBoards></UserBoards>
     </Page>
