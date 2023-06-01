@@ -1,9 +1,10 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { socket } from '../socket';
 import OnlineUsers from './OnlineUsers';
 import CreateCard from './CreateCard';
 import Column from './Column';
 import styled, { keyframes } from 'styled-components';
+import { UserContext } from '../userContext';
 
 const Header = styled.div`
   display: flex;
@@ -38,10 +39,16 @@ const Board = styled.div`
 const HEADERS = ['To Do', 'In Progress', 'Complete', 'Reviewed'];
 
 const BoardPage = () => {
+  const {currBoard, setCurrBoard} = useContext(UserContext)
   // initial state of board will be result of get request.
   const [tasks, setTasks] = useState([[], [], [], []]);
   const [allUsers, setAllUsers] = useState({});
   const [user, setUser] = useState();
+
+  // Wills 2am idea for storing state of board
+  // currBoard is an object and will store tasks, allUsers, and user, as well as boardID and boardName
+  // the default state of tasks, allUsers etc. will be set from the currBoard obj
+
 
   useEffect(() => {
     // get request the associated board id in the DB

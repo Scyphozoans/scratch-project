@@ -1,8 +1,9 @@
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState , useRef, createRef } from 'react';
 import styled, { keyframes } from 'styled-components';
 import { Link } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
 import boardModel from '../../server/models/boardModel';
+import { UserContext } from '../userContext';
 
 const gridAnimation = keyframes`
   0% { background-position:  0%; }
@@ -92,8 +93,10 @@ const Input = styled.input`
 /********************************* Component **************************************/
 
 const Boards = () => {
-  const [boardName, setBoardName] = useState('');
-  const names = ['Scrummy 1', 'Scrummy 2', 'Scrummy 3'];
+  const { userBoards, setUserBoards, setCurrBoard } = useContext(UserContext)
+  const createBoardRef = useRef(null)
+
+  // const names = ['Scrummy 1', 'Scrummy 2', 'Scrummy 3'];
   const navigate = useNavigate();
 
   // useEffect to populate the boards for the pertaining user on load
@@ -113,67 +116,88 @@ const Boards = () => {
   // }, []);
 
   // handleClick button to handle deletion of boards
-  const handleClickDeleteBoard = (e) => {
+  const handleClickDeleteBoard = async (el) => {
     console.log('deleted');
-    console.log(e);
-    async function deleteBoard() {
+    console.log(el);
+
+
       try {
-        const reponse = await fetch(`/board/${boardName}`, {
+        const reponse = await fetch(`/board/${el.boardID}`, {
           method: 'DELETE',
           headers: {
             'Content-type': 'application/json; charset=UTF-8',
           },
         });
+      //  const data = await response.json() backend send deleted boardname plz
+        setUserBoards((prevUserBoards) =>
+        prevUserBoards.filter((board) => board[1] !== el.boardName)
+      )
       } catch (err) {
         console.log(err);
       }
-    }
-  };
+    };
+  
 
   // self explanatory
-  const handleClickDirectUserToCorrectBoard = () => {
-    console.log('wsap');
+  const handleClickDirectUserToCorrectBoard = (e,boardID,boardName) => {
+    e.preventDefault()
+    //SEE wills NOTE IN BOARDPAGE
+    setCurrBoard((prev) => {
+      prev.boardID = boardID
+      prev.boardName = boardName}
+    )
+    navigate("/board");
   };
 
   // handleClick function to add new board to database and redirect you to new board
-  const handleSubmit = () => {
+  const handleSubmit = (e) => {
+    e.preventDefault()
     async function postNewBoard() {
       try {
         const response = await fetch('/board/create', {
           method: 'POST',
           body: JSON.stringify({
-            boardname: boardName,
+            boardName: createBoardRef.current.value,
             users: 'test',
           }),
           headers: {
             'Content-type': 'application/json; charset=UTF-8',
           },
         });
+        const data = await response.json()
+        if(response.ok){
+          setUserBoards([...userBoards,[data._id,data.boardName]])
+        }
       } catch (err) {
         console.log(err);
       }
     }
     postNewBoard();
-    navigate('/board');
+    // navigate('/board');
   };
+
+  
 
   return (
     <SelectBoards>
       <Header>Scrummies</Header>
       <div>
-        {names.map((e, i) => (
-          <Links key={i} onClick={() => handleClickDirectUserToCorrectBoard()}>
-            {e}
-            <button onClick={(e) => handleClickDeleteBoard(e)}>X</button>
+        {userBoards.map((el, i) => {
+          const obj = Object.keys(el)
+          return (
+          <Links key={i} name={el[obj[1]]} onClick={handleClickDirectUserToCorrectBoard({ boardName: el[obj[1]], boardID: el[obj[0]]})}  >
+            {el[obj[1]]}
+            <button onClick={(e) => handleClickDeleteBoard({ boardName: el[obj[1]], boardID: el[obj[0]]})}>X</button>
           </Links>
-        ))}
+          )
+})}
         {/* <Link to="/board">Create new board</Link> */}
-        <Form onSubmit={() => handleSubmit()}>
+        <Form onSubmit={handleSubmit}>
           <Input
             type="text"
             name="boardname" // TODO: not sure if this is the correct property from body
+            ref={createBoardRef}
             placeholder="board name..."
-            onChange={(e) => setBoardName(e.target.value)}
           ></Input>
           <Button type="submit">
             <svg
