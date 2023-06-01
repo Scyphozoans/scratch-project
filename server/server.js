@@ -34,8 +34,6 @@ const PORT = process.env.PORT || 8080;
 // Serve static files in the /dist folder
 app.use('/', express.static(path.join(__dirname, '../dist')));
 
-
-
 // configure socket.IO server
 const io = socketIO(server, {
   pingTimeout: 1000, // how many ms without a ping packet to consider the connection closed
@@ -83,21 +81,22 @@ app.post('/board/create',
   }
 );
 
-// GET BOARD NAMES
-app.get('/board/:userID',
-  boardController.getBoardNames,
-  (req, res) => {
-    res.status(200).json(res.locals.boardArray);
-  }
-);
+// // GET BOARD NAMES
+// app.get('/board/:userID',
+//   boardController.getBoardNames,
+//   (req, res) => {
+//     res.status(200).json(res.locals.boardArray);
+//   }
+// );
 
 // GET BOARD DATA
-app.get('/board/:boardID',
+app.get('/board',
   boardController.getBoardData,
   (req, res) => {
     res.status(200).json(res.locals.boardData);
   }
 );
+
 // DELETE BOARD
 app.delete('/board/:boardID', 
 boardController.deleteBoard, 
@@ -106,7 +105,9 @@ boardController.deleteBoard,
 });
 
 // UPDATE BOARD
-app.put('/board/:boardID', boardController.updateBoard, (req, res) => {
+app.put('/board/:boardID', 
+boardController.updateBoard, 
+(req, res) => {
   res.status(200).json(res.locals.board);
 });
 

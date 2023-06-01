@@ -57,25 +57,25 @@ boardController.deleteBoard = async (req, res, next) => {
   }
 };
 
-boardController.getBoardNames = async (req, res, next) => {
-  const { userID } = req.params;
-  try {
-    const user = await User.findById(userID);
-    const { boards } = user;
-    res.locals.boards = boards;
-    return next();
-  } catch (error) {
-    console.log(error);
-    return next({ err: 'Error finding user data' });
-  }
-};
+// boardController.getBoardNames = async (req, res, next) => {
+//   const { userID } = req.params;
+//   try {
+//     const user = await User.findById(userID);
+//     const { boards } = user;
+//     res.locals.boards = boards;
+//     return next();
+//   } catch (error) {
+//     console.log(error);
+//     return next({ err: 'Error finding user data' });
+//   }
+// };
 
 boardController.getBoardData = async (req, res, next) => {
   const { boardID } = req.query;
   try {
-    const boardData = await Board.findById(boardID);
-    const { boardName, storage, users } = boardData;
-    res.locals.boardData = { board, storage, users };
+    const board = await Board.findById(boardID);
+    const { storage } = board;
+    res.locals.board = storage;
     return next();
   } catch (error) {
     console.log(error);
