@@ -94,8 +94,6 @@ const Login = () => {2
       username: usernameRef.current.value,
       password: passwordRef.current.value,
     };
-    console.log(loginUserData)
-    console.log('THIS IS LOGINUSERDATA', loginUserData);
     e.preventDefault();
     try {
       const postURL = '/auth/login';
@@ -109,7 +107,9 @@ const Login = () => {2
       });
       const data = await fetchResponse.json();
       console.log(data);
+      if(fetchResponse.ok){
       navigate('/home')
+      }
       // setClientData(data);
       return data;
     } catch (error) {
@@ -134,7 +134,6 @@ const Login = () => {2
           type="password"
           placeholder="password"
         ></Input>
-        {hasError && <Error> there was an error </Error>}
         {hasError && <Error> there was an error </Error>}
         <ButtonContainer>
 
