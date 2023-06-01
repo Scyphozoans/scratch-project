@@ -76,9 +76,12 @@ boardController.getBoardData = async (req, res, next) => {
   console.log('NOW IN GET BOARD DATA')
   const { boardID } = req.query;
   try {
-    const board = await Board.findById(boardID);
+    const board = await Board.findById(boardID) ?? {};
     const { storage, users } = board;
     // add users later
+    if(!storage && !users){
+      return res.redirect(req.baseUrl + "signup")
+    }
     res.locals.board = storage;
     res.locals.users = users;
     console.log('BOARD.STORAGE:', storage);
