@@ -10,7 +10,7 @@ boardController.createBoard = async (req, res, next) => {
 
   // pull ssid from cookies
   const { ssid } = req.cookies;
-   
+
   try {
     
     // create new board with board name
@@ -20,13 +20,14 @@ boardController.createBoard = async (req, res, next) => {
     const { id } = board;
 
     // find user that created the board
-    const user = await User.findById({_id: ssid});
+    const user = await User.findById(ssid);
 
     // add board id and name to user 
-    user.boards[id] = boardName;
+    user.addBoard(id, boardName);
 
     // send board info on res locals
     res.locals.board = board;
+    console.log(res.locals.board);
     return next();
   } catch (error) {
     console.log(error);
@@ -34,11 +35,32 @@ boardController.createBoard = async (req, res, next) => {
   }
 };
 
-// find the associated user from
+boardController.deleteBoard = async (req, res, next) => {
+  
+  // pull board ID from req params
+  const { boardID } = req.params;
+  // pull ssid from cookies
+  const { ssid } = req.cookies;
+  try {
+    // find user
+    const user = await User.findById(ssid);
+    // delete board from user document
+    user.deleteBoard(boardID);
+
+    // delete board from board document
+    await Board.findOneAndDelete({ _id: boardID });
+    
+    return next();
+  } catch (error) {
+    console.log(error);
+    return next({ err: 'Error deleting board.' });
+  }
+};
+
 boardController.getBoardNames = async (req, res, next) => {
   const { userID } = req.params;
   try {
-    const user = await User.find({ _id: userID });
+    const user = await User.findById(userID);
     const { boards } = user;
     res.locals.boards = boards;
     return next();
@@ -51,8 +73,8 @@ boardController.getBoardNames = async (req, res, next) => {
 boardController.getBoardData = async (req, res, next) => {
   const { boardID } = req.params;
   try {
-    const boardData = await Board.find({ _id: boardID });
-    const { board, storage, users } = boardData;
+    const boardData = await Board.findById(boardID);
+    const { boardName, storage, users } = boardData;
     res.locals.boardData = { board, storage, users };
     return next();
   } catch (error) {
@@ -61,22 +83,10 @@ boardController.getBoardData = async (req, res, next) => {
   }
 };
 
-boardController.deleteBoard = async (req, res, next) => {
-  const { boardID } = req.params;
-  try {
-    await Board.findOneAndDelete({ boardID });
-    return next();
-  } catch (error) {
-    console.log(error);
-    return next({ err: 'Error deleting board.' });
-  }
-};
-
-
 boardController.updateBoard = async (req, res, next) => {
   const { boardID, storage } = req.body;
   try {
-    const board = await Board.findByIdAndUpdate(boardID, { storage: storage });
+    const board = await Board.findByIdAndUpdate(boardID, { storage });
     res.locals.board = board;
     return next();
   } catch (error) {
