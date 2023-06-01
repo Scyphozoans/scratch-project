@@ -93,7 +93,7 @@ app.post('/board/create',
 app.get('/board',
   boardController.getBoardData,
   (req, res) => {
-    res.status(200).json(res.locals.boardData);
+    res.status(200).json(res.locals.board);
   }
 );
 

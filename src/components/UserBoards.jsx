@@ -124,17 +124,23 @@ const Boards = () => {
   // self explanatory
   const handleClickDirectUserToCorrectBoard = async (e,boardObj) => {
     e.preventDefault()
+    console.log(boardObj.boardID)
     try {
-      const response = await fetch(`/board?boardID=${boardObj.boardID}`, {
-      });
+      const response = await fetch(`/board?boardID=${boardObj.boardID}`,{
+        headers: {
+          'Content-type': 'application/json; charset=UTF-8',
+        },
+      })
       const data = await response.json()
+      
       if(response.ok){
+        setCurrBoard(data)
+        navigate("/board")
         console.log(data)
       }
     } catch (err) {
       console.log(err);
     }
-    console.log(boardObj)
     
     //SEE wills NOTE IN BOARDPAGE
     // setCurrBoard((prev) => {

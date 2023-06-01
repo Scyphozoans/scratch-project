@@ -41,7 +41,7 @@ const HEADERS = ['To Do', 'In Progress', 'Complete', 'Reviewed'];
 const BoardPage = () => {
   const {currBoard, setCurrBoard} = useContext(UserContext)
   // initial state of board will be result of get request.
-  const [tasks, setTasks] = useState([[], [], [], []]);
+  const [tasks, setTasks] = useState(currBoard);
   const [allUsers, setAllUsers] = useState({});
   const [user, setUser] = useState();
 
@@ -50,9 +50,10 @@ const BoardPage = () => {
   // the default state of tasks, allUsers etc. will be set from the currBoard obj
 
   useEffect(() => {
-    console.log('Tasks changed:', tasks);
+    setCurrBoard(tasks)
+    console.log(currBoard)
   }, [tasks]);
-  
+
   useEffect(() => {
     // get request the associated board id in the DB
     // pull the data on the storage property
