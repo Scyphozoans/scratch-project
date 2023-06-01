@@ -34,11 +34,6 @@ const PORT = process.env.PORT || 8080;
 // Serve static files in the /dist folder
 app.use('/', express.static(path.join(__dirname, '../dist')));
 
-//redirect to enable client-side routing
-app.get('*', (req, res) => {
-  res.sendFile(path.join(__dirname, '../dist', 'index.html'));
-});
-
 // configure socket.IO server
 const io = socketIO(server, {
   pingTimeout: 1000, // how many ms without a ping packet to consider the connection closed
@@ -51,7 +46,7 @@ app.post(
   userController.createUser,
   cookieController.setSSIDCookie,
   sessionController.startSession,
-  (req, res) => {
+  (_req, res) => {
     return res.status(200).json(res.locals.user); // home page or profile page?
     // possibly route through frontend so just send status and user info
   }
@@ -62,7 +57,7 @@ app.post(
   userController.verifyUser,
   cookieController.setSSIDCookie,
   sessionController.startSession,
-  (req, res) => {
+  (_req, res) => {
     // res.locals.user = user data,
     // res.locals.userID = user._id
     // res.locals.session = session
@@ -72,52 +67,77 @@ app.post(
 );
 
 //SET UP ROUTE FOR LOGOUT
-app.delete('/auth/logout', sessionController.endSession, (req, res) => {
-  res.status(200).send('Successful logout.');
-});
+app.delete('/auth/logout', 
+  sessionController.endSession, 
+  (_req, res) => {
+    res.status(200).send('Successful logout.');
+  }
+);
 
 //*****************BOARD ROUTES*****************/
 
 // CREATE BOARD
 app.post('/board/create',
   boardController.createBoard,
-  (req, res) => {
+  (_req, res) => {
     res.status(200).json(res.locals.board);
   }
 );
 
-// GET BOARD NAMES
-app.get('/board/:userID',
-  boardController.getBoardNames,
-  (req, res) => {
-    res.status(200).json(res.locals.boardArray);
-  }
-);
+// // GET BOARD NAMES
+// app.get('/board/:userID',
+//   boardController.getBoardNames,
+//   (req, res) => {
+//     res.status(200).json(res.locals.boardArray);
+//   }
+// );
 
-// GET BOARD DATA
-app.get('/board/:boardID',
+// GET BOARD DATA, BOARD ID WILL BE PULL FROM REQ QUERY
+app.get('/board',
   boardController.getBoardData,
-  (req, res) => {
+  (_req, res) => {
     res.status(200).json(res.locals.board);
   }
 );
-// DELETE BOARD
-app.delete('/board/:boardID', 
-boardController.deleteBoard, 
-(req, res) => {
-  res.sendStatus(200);
-});
 
 // UPDATE BOARD
-app.put('/board/:boardID', boardController.updateBoard, (req, res) => {
-  res.status(200).json(res.locals.board);
-});
+app.put('/board', 
+  boardController.updateBoard, 
+  (_req, res) => {
+    res.sendStatus(200);
+  }
+);
+
+// DELETE BOARD
+app.delete('/board/:boardID', 
+  boardController.deleteBoard, 
+  (_req, res) => {
+    res.sendStatus(200);
+  }
+);
+
+// UPDATE BOARD USERS
+app.put('/board/users',
+  boardController.updateBoardUsers, 
+  (_req, res) => {
+    res.sendStatus(200);
+  }
+);
+
+//redirect to enable client-side routing
+app.get('*', 
+  (_req, res) => {
+    res.sendFile(path.join(__dirname, '../dist', 'index.html'));
+  }
+);
 
 // SET UP UNKNOWN ROUTES
 
-app.use('*', (_req, res) => {
-  res.status(404).send('Not Found');
-});
+app.use('*', 
+  (_req, res) => {
+    res.status(404).send('Not Found');
+  }
+);
 
 // SET UP GLOBAL ERROR HANDLER
 app.use((err, _req, res, _next) => {

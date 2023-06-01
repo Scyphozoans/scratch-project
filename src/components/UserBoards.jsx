@@ -128,8 +128,11 @@ const Div = styled.div`
 /********************************* Component **************************************/
 
 const Boards = () => {
-  const { userBoards, setUserBoards, setCurrBoard } = useContext(UserContext);
+  const { userBoards, setUserBoards, setCurrBoard, setCurrBoardID } =
+    useContext(UserContext);
   const createBoardRef = useRef(null);
+
+  // const names = ['Scrummy 1', 'Scrummy 2', 'Scrummy 3'];
   const navigate = useNavigate();
 
   // handleClick button to handle deletion of boards
@@ -154,14 +157,33 @@ const Boards = () => {
   };
 
   // self explanatory
-  const handleClickDirectUserToCorrectBoard = (e) => {
+  const handleClickDirectUserToCorrectBoard = async (e, boardObj) => {
     e.preventDefault();
+    console.log(boardObj.boardID);
+    try {
+      const response = await fetch(`/board?boardID=${boardObj.boardID}`, {
+        headers: {
+          'Content-type': 'application/json; charset=UTF-8',
+        },
+      });
+      const data = await response.json();
+
+      if (response.ok) {
+        setCurrBoard(data);
+        setCurrBoardID(boardObj.boardID);
+        navigate('/board');
+        console.log(data);
+      }
+    } catch (err) {
+      console.log(err);
+    }
+
     //SEE wills NOTE IN BOARDPAGE
     // setCurrBoard((prev) => {
     //   prev.boardID = boardID
     //   prev.boardName = boardName}
     // )
-    navigate('/board');
+    // navigate("/board");
   };
 
   // handleClick function to add new board to database and redirect you to new board
@@ -219,6 +241,7 @@ const Boards = () => {
             </Div>
           );
         })}
+        {/* <Link to="/board">Create new board</Link> */}
         <Form onSubmit={handleSubmit}>
           <Input
             type="text"
