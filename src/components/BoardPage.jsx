@@ -49,7 +49,10 @@ const BoardPage = () => {
   // currBoard is an object and will store tasks, allUsers, and user, as well as boardID and boardName
   // the default state of tasks, allUsers etc. will be set from the currBoard obj
 
-
+  useEffect(() => {
+    console.log('Tasks changed:', tasks);
+  }, [tasks]);
+  
   useEffect(() => {
     // get request the associated board id in the DB
     // pull the data on the storage property
@@ -59,6 +62,8 @@ const BoardPage = () => {
       console.log(tasks);
       setTasks(() => tasks);
     }
+
+
 
     function onUserConnected(usersObj) {
       setAllUsers(usersObj);

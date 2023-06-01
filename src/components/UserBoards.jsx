@@ -96,24 +96,7 @@ const Boards = () => {
   const { userBoards, setUserBoards, setCurrBoard } = useContext(UserContext)
   const createBoardRef = useRef(null)
 
-  // const names = ['Scrummy 1', 'Scrummy 2', 'Scrummy 3'];
   const navigate = useNavigate();
-
-  // useEffect to populate the boards for the pertaining user on load
-  // useEffect(() => {
-  //   async function fetchBoardNames() {
-  //     try {
-  //       const names = await Model.find({
-  //         name: name;
-  //       })
-  //     } catch (err) {
-  //       console.log(err);
-  //     }
-  //   }
-
-  // }
-  //   fetchBoardNames();
-  // }, []);
 
   // handleClick button to handle deletion of boards
   const handleClickDeleteBoard = async (el) => {
@@ -139,14 +122,26 @@ const Boards = () => {
   
 
   // self explanatory
-  const handleClickDirectUserToCorrectBoard = (e) => {
+  const handleClickDirectUserToCorrectBoard = async (e,boardObj) => {
     e.preventDefault()
+    try {
+      const response = await fetch(`/board?boardID=${boardObj.boardID}`, {
+      });
+      const data = await response.json()
+      if(response.ok){
+        console.log(data)
+      }
+    } catch (err) {
+      console.log(err);
+    }
+    console.log(boardObj)
+    
     //SEE wills NOTE IN BOARDPAGE
     // setCurrBoard((prev) => {
     //   prev.boardID = boardID
     //   prev.boardName = boardName}
     // )
-    navigate("/board");
+    // navigate("/board");
   };
 
   // handleClick function to add new board to database and redirect you to new board
@@ -185,7 +180,7 @@ const Boards = () => {
         {userBoards.map((el, i) => {
           const obj = Object.keys(el)
           return (
-          <Links key={i} name={el[obj[1]]} onClick={handleClickDirectUserToCorrectBoard}  >
+          <Links key={i} name={el[obj[1]]} onClick={(e) => handleClickDirectUserToCorrectBoard(e, { boardName: el[obj[1]], boardID: el[obj[0]]})}  >
             {el[obj[1]]}
             <button onClick={(e) => handleClickDeleteBoard({ boardName: el[obj[1]], boardID: el[obj[0]]})}>X</button>
           </Links>

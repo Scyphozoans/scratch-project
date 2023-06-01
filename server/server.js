@@ -34,10 +34,7 @@ const PORT = process.env.PORT || 8080;
 // Serve static files in the /dist folder
 app.use('/', express.static(path.join(__dirname, '../dist')));
 
-//redirect to enable client-side routing
-app.get('*', (req, res) => {
-  res.sendFile(path.join(__dirname, '../dist', 'index.html'));
-});
+
 
 // configure socket.IO server
 const io = socketIO(server, {
@@ -98,7 +95,7 @@ app.get('/board/:userID',
 app.get('/board/:boardID',
   boardController.getBoardData,
   (req, res) => {
-    res.status(200).json(res.locals.board);
+    res.status(200).json(res.locals.boardData);
   }
 );
 // DELETE BOARD
@@ -111,6 +108,11 @@ boardController.deleteBoard,
 // UPDATE BOARD
 app.put('/board/:boardID', boardController.updateBoard, (req, res) => {
   res.status(200).json(res.locals.board);
+});
+
+//redirect to enable client-side routing
+app.get('*', (req, res) => {
+  res.sendFile(path.join(__dirname, '../dist', 'index.html'));
 });
 
 // SET UP UNKNOWN ROUTES

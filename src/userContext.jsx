@@ -11,7 +11,9 @@ export const UserProvider = ({children}) => {
         username,
         setUsername,
         userBoards,
-        setUserBoards
+        setUserBoards,
+        currBoard,
+        setCurrBoard
     }
     return (
         <UserContext.Provider value ={contextProps}>

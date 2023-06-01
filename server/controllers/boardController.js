@@ -71,7 +71,7 @@ boardController.getBoardNames = async (req, res, next) => {
 };
 
 boardController.getBoardData = async (req, res, next) => {
-  const { boardID } = req.params;
+  const { boardID } = req.query;
   try {
     const boardData = await Board.findById(boardID);
     const { boardName, storage, users } = boardData;
